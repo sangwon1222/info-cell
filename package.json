@@ -63,9 +63,11 @@
     "lodash-es": "^4.17.21",
     "serialport": "^11.0.0",
     "ts-node": "^10.9.1",
+    "electron": "^22.3.4",
+    "electron-vite": "^1.0.21",
     "vue-router": "^4.2.0",
     "vue-toastification": "2.0.0-rc.2",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
+    "electron-builder": "^24.4.0"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
@@ -76,9 +78,6 @@
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.2",
     "autoprefixer": "^10.4.14",
-    "electron": "^22.3.4",
-    "electron-builder": "^24.4.0",
-    "electron-vite": "^1.0.21",
     "eslint": "^8.36.0",
     "eslint-plugin-vue": "^9.10.0",
     "less": "^4.1.3",

@@ -12,7 +12,6 @@ const createTableSQL =
   'sceneIdx TEXT NOT NULL UNIQUE,' +
   'place TEXT NOT NULL,' +
   'contents TEXT NOT NULL,' +
-  'event TEXT DEFAULT "",' +
   'img TEXT DEFAULT "",' +
   'PRIMARY KEY(idx AUTOINCREMENT)' +
   ')'
@@ -23,7 +22,7 @@ class DBbase implements TypeMiddleware {
   private mDB: any
 
   async _check() {
-    return this.mDB
+    return true
   }
 
   async _reConnect() {
@@ -225,6 +224,31 @@ class DBbase implements TypeMiddleware {
         } else {
           resolve({ ok: false, msg: 'HAS NOT TEST txt', data })
         }
+      } catch (e) {
+        resolve({ ok: false, msg: `${e}`, data: '' })
+      }
+    })
+  }
+
+  async getScene(scene): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      const name = `db/${scene.replaceAll(`"`, '')}.json`
+      try {
+        const data = fs.readFileSync(name).toString()
+        resolve({ ok: true, data })
+      } catch (e) {
+        resolve({ ok: false, msg: `${e}`, data: '' })
+      }
+    })
+  }
+
+  async readFile(file: string): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      const name = `db/${file.replaceAll(`"`, '')}`
+      try {
+        const base64 = fs.readFileSync(name, 'base64')
+        const data = 'data:image/png;base64, ' + base64.toString('base64')
+        resolve({ ok: true, data })
       } catch (e) {
         resolve({ ok: false, msg: `${e}`, data: '' })
       }

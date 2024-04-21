@@ -73,6 +73,27 @@ class DBmanager {
 
   // _____________________________________________________________
 
+  async readFile(param) {
+    try {
+      const { ok, data, msg } = await window.DBapi.readFile(param)
+      return { ok, data, msg }
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  }
+
+  async getScene(sceneName: string) {
+    try {
+      const { ok, data, msg } = await window.DBapi.getScene(sceneName)
+      return { ok, data, msg }
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  }
+  // _____________________________________________________________
+
   async readTxt() {
     try {
       const { ok, data, msg } = await window.DBapi.readTxt()

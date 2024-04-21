@@ -12,8 +12,9 @@ const state = reactive({
   saveData: {
     sceneIdx: 'NONE',
     place: '',
-    img: '',
-    contents: []
+    img: [],
+    contents: [],
+    event: {label:'select',ary:[]}
   },
   editIdx: '',
   characterList: {}
@@ -33,7 +34,7 @@ const addContent = () => {
     role: 'name',
     name: '',
     content: '',
-    event: ''
+    event: {label:'select',ary:[]}
   })
 }
 const deleteContents = (index: number) => {
@@ -73,7 +74,7 @@ const changeRole = (e, v) => {
   v.role = role
   v.name = ''
   v.content = ''
-  v.event = ''
+  v.event =  {label:'select',ary:[]}
 }
 
 const save = async () => {
@@ -81,6 +82,8 @@ const save = async () => {
   const data: any = { ...state.saveData }
   data.contents = JSON.stringify(state.saveData.contents)
   try {
+    console.log({isEdit: state.isEdit})
+    console.log({params: data})
     const { ok, msg } = state.isEdit ? await dbManager.update(data) : await dbManager.insert(data)
     console.log(ok, msg)
     if (ok) {
@@ -105,7 +108,7 @@ const chageMode = async () => {
     state.saveData = {
       sceneIdx: '',
       place: '',
-      img: '',
+      img: [],
       contents: []
     }
     state.editIdx = ''
@@ -141,7 +144,7 @@ const setSceneIdx = async (e) => {
   state.saveData.sceneIdx = e.target.value
   state.characterList = {}
   if (state.saveData.sceneIdx == 'NONE') {
-    state.saveData = { sceneIdx: 'NONE', place: '', img: '', contents: [] }
+    state.saveData = { sceneIdx: 'NONE', place: '', img: [], contents: [] }
   } else {
     await updateMode()
   }
@@ -209,6 +212,8 @@ const setEventNextScene = (e, v, index) => {
     </div>
     <div class="flex gap-2 border-2 border-gray-400">
       <label for="scene-img">img:</label>
+      <div class="flex gap-4">
+        <p>배경</p>
       <input
         id="scene-img"
         type="text"
@@ -216,6 +221,8 @@ const setEventNextScene = (e, v, index) => {
         :value="state.saveData.img"
         @input="e=>state.saveData.img=(e.currentTarget as HTMLInputElement).value"
       />
+    </div>
+    
     </div>
 
     <div class="flex flex-col gap-2 border-2 border-gray-400">
@@ -237,7 +244,7 @@ const setEventNextScene = (e, v, index) => {
             X
           </button>
           <select :id="`${i}-role`" name="role" class="text-black" @change="changeRole($event, v)">
-            <option v-for="(role, j) in roleList" :key="`${i}-${role}-${j}`" :value="role">
+            <option v-for="(role, j) in roleList" :key="`${i}-${role}-${j}`" :value="role" :selected="role==v.role">
               {{ roleLabel[role] }}
             </option>
           </select>

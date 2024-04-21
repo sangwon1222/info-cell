@@ -1,0 +1,82 @@
+{
+    "content": [
+        {
+            "place": "하린의 방",
+            "placeImg":"harinroom.png",
+            "img": {"left":"","right":"","center": "harin.png"},
+            "actor":"",
+            "line": [
+                "아파트는 아늑하면서도 아날로그적인 취향이 가득하다.",
+                "벽에는 수많은 책과 레코드판이 정리되어 있고, 고풍스러운 타자기가 한 쪽 구석에 자리잡고 있다."
+            ]
+        },
+        {
+            "place": "하린의 방",
+            "placeImg":"harinroom.png",
+            "img": {"left":"","right":"","center": ""},
+            "actor":"",
+            "line": ["TV에서 소리가 흘러 나온다."]
+        },
+        {
+            "place": "하린의 방",
+            "placeImg":"harinroom.png",
+            "img": {"left":"","right":"","center": ""},
+            "actor":"유정혁",
+            "line": [
+                "안녕하십니까, 여러분. <에온> 대표 유정혁입니다.", 
+                "오늘 저는 여러분께 인포셀의 놀라운 성과와 그 가능성에 대해 말씀드리고자 합니다. ",
+                "현재 인포셀의 점유율은 인구의 70%를 넘어섰습니다. ",
+                "이는 인포셀이 단순한 기술을 넘어, 우리 생활의 필수 요소가 되었음을 의미합니다."
+            ]
+        },
+        {
+            "place": "하린의 방",
+            "placeImg":"harinroom.png",
+            "img": {"left":"","right":"","center": "harin.png"},
+            "actor":"유하린",
+            "line": [
+                "세상은 너무나 빠르게 변했어. 나만 시간에 뒤처진 채 남겨진 것 같아"
+            ]
+        },
+        {
+            "place": "하린의 방",
+            "placeImg":"harinroom.png",
+            "img": {"left":"","right":"","center": "harin.png"},
+            "actor":"",
+            "line": ["하린이 창가로 걸어가 밖을 내다본다."]
+        },
+        {
+            "place": "도시의 밤거리",
+            "placeImg":"street.png",
+            "img": {"left":"","right":"","center": ""},
+            "actor":"",
+            "line": ["하린이 밤거리를 걷는다. 주변은 인포셀에 몰두한 사람들로 가득 차 있다. 각각의 사람들은 인포셀을 사용하며 각자의 세계에 빠져있다."]
+        },
+        {
+            "place": "도시의 밤거리",
+            "placeImg":"street.png",
+            "img": {"left":"","right":"","center": "harin.png"},
+            "actor":"유하린",
+            "line": [
+                "세계 인구의 70%가 넘는 사람들이 인포셀을 사용하고 있어. 나는 점점 더 고립되어 가고 있는 것 같아."]
+        },
+        {
+            "place": "도시의 밤거리",
+            "placeImg":"street.png",
+            "img": {"left":"heajun.png","right":"harin.png","center": ""},
+            "actor":"",
+            "line": [
+                "누군가 하린에게 다가온다."
+            ]
+        },
+        {
+            "place": "도시의 밤거리",
+            "placeImg":"street.png",
+            "img": {"left":"heajun.png","right":"harin.png","center": ""},
+            "actor":"유하린",
+            "line": [
+                "뭐... 뭐야??"
+            ]
+        }
+    ]
+}

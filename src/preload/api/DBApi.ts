@@ -55,38 +55,19 @@ export default class DBapi {
     })
   }
 
-  async readTxt(): Promise<TypeDBResponse> {
+  async readFile(param): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
-      this.mIpcRenderer.invoke('readTxt').then(({ ok, msg, data }) => resolve({ ok, msg, data }))
+      this.mIpcRenderer
+        .invoke('readFile', [JSON.stringify(param)])
+        .then(({ ok, msg, data }) => resolve({ ok, msg, data }))
     })
   }
 
-  async updateTxt({
-    host,
-    port,
-    antenna,
-    buzzer,
-    powerGain,
-    com,
-    baudRate,
-    byteLength,
-    stopCount,
-    againCount
-  }): Promise<TypeDBResponse> {
+  async getScene(sceneName): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
-      const params = {
-        host,
-        port,
-        antenna,
-        buzzer,
-        powerGain,
-        com,
-        baudRate,
-        byteLength,
-        stopCount,
-        againCount
-      }
-      this.mIpcRenderer.invoke('updateTxt', [params]).then((result) => resolve(result))
+      this.mIpcRenderer
+        .invoke('getScene', [sceneName])
+        .then(({ ok, msg, data }) => resolve({ ok, msg, data }))
     })
   }
 }
