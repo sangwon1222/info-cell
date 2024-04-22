@@ -14,7 +14,7 @@ const state = reactive({
     place: '',
     img: [],
     contents: [],
-    event: {label:'select',ary:[]}
+    event: { label: 'select', ary: [] }
   },
   editIdx: '',
   characterList: {}
@@ -34,7 +34,7 @@ const addContent = () => {
     role: 'name',
     name: '',
     content: '',
-    event: {label:'select',ary:[]}
+    event: { label: 'select', ary: [] }
   })
 }
 const deleteContents = (index: number) => {
@@ -74,7 +74,7 @@ const changeRole = (e, v) => {
   v.role = role
   v.name = ''
   v.content = ''
-  v.event =  {label:'select',ary:[]}
+  v.event = { label: 'select', ary: [] }
 }
 
 const save = async () => {
@@ -82,8 +82,8 @@ const save = async () => {
   const data: any = { ...state.saveData }
   data.contents = JSON.stringify(state.saveData.contents)
   try {
-    console.log({isEdit: state.isEdit})
-    console.log({params: data})
+    console.log({ isEdit: state.isEdit })
+    console.log({ params: data })
     const { ok, msg } = state.isEdit ? await dbManager.update(data) : await dbManager.insert(data)
     console.log(ok, msg)
     if (ok) {
@@ -214,15 +214,14 @@ const setEventNextScene = (e, v, index) => {
       <label for="scene-img">img:</label>
       <div class="flex gap-4">
         <p>배경</p>
-      <input
-        id="scene-img"
-        type="text"
-        tabindex="3"
-        :value="state.saveData.img"
-        @input="e=>state.saveData.img=(e.currentTarget as HTMLInputElement).value"
-      />
-    </div>
-    
+        <input
+          id="scene-img"
+          type="text"
+          tabindex="3"
+          :value="state.saveData.img"
+          @input="e=>state.saveData.img=(e.currentTarget as HTMLInputElement).value"
+        />
+      </div>
     </div>
 
     <div class="flex flex-col gap-2 border-2 border-gray-400">
@@ -244,7 +243,12 @@ const setEventNextScene = (e, v, index) => {
             X
           </button>
           <select :id="`${i}-role`" name="role" class="text-black" @change="changeRole($event, v)">
-            <option v-for="(role, j) in roleList" :key="`${i}-${role}-${j}`" :value="role" :selected="role==v.role">
+            <option
+              v-for="(role, j) in roleList"
+              :key="`${i}-${role}-${j}`"
+              :value="role"
+              :selected="role == v.role"
+            >
               {{ roleLabel[role] }}
             </option>
           </select>

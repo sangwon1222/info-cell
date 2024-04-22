@@ -1,6 +1,6 @@
 {
   "name": "INFO-CELL",
-  "version": "1.0.4",
+  "version": "1.0.1",
   "description": "INFO-CELL",
   "main": "./out/main/index.js",
   "author": "http://INFO-CELL.co.kr/",
@@ -21,21 +21,9 @@
   },
   "build": {
     "productName": "INFO-CELL",
-    "appId": "com.INFO-CELL.electron",
+    "appId": "com.electron.INFO-CELL",
     "asar": true,
-    "mac": {
-      "target": "default",
-      "icon": "icon.icns"
-    },
-    "dmg": {
-      "title": "INFO-CELL",
-      "icon": "icon.icns"
-    },
     "win": {
-      "target": [
-        "zip",
-        "nsis"
-      ],
       "icon": "./build/icon.ico"
     },
     "nsis": {
@@ -63,11 +51,9 @@
     "lodash-es": "^4.17.21",
     "serialport": "^11.0.0",
     "ts-node": "^10.9.1",
-    "electron": "^22.3.4",
     "electron-vite": "^1.0.21",
     "vue-router": "^4.2.0",
-    "vue-toastification": "2.0.0-rc.2",
-    "electron-builder": "^24.4.0"
+    "vue-toastification": "2.0.0-rc.2"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
@@ -87,6 +73,8 @@
     "typescript": "^4.9.5",
     "vite": "^4.2.1",
     "vue": "^3.2.47",
-    "vue-tsc": "^1.2.0"
+    "vue-tsc": "^1.2.0",
+    "electron-builder": "^24.4.0",
+    "electron": "^22.3.4"
   }
 }
