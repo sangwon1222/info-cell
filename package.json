@@ -21,25 +21,7 @@
   },
   "build": {
     "productName": "INFO-CELL",
-    "appId": "com.electron.INFO-CELL",
-    "asar": true,
-    "win": {
-      "icon": "./build/icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": false,
-      "createDesktopShortcut": true,
-      "installerIcon": "./build/icon.ico",
-      "shortcutName": "INFO-CELL",
-      "artifactName": "INFO-CELL-${version}.${ext}",
-      "uninstallDisplayName": "INFO-CELL"
-    },
-    "directories": {
-      "buildResources": "./build/",
-      "output": "./dist/",
-      "app": "."
-    }
+    "appId": "com.electron.INFO-CELL"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^1.0.3",
