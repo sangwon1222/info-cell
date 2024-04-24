@@ -1,128 +1,49 @@
 <script setup lang="ts" scoped>
+import tGameScreen from '@/components/template/tGameScreen.vue'
+import tEditTool from '@/components/template/tool/tEditTool.vue'
 import { useSceneStore } from '@/store/scene'
-import dbManager from '@/util/dbManager'
-import { ok } from 'assert'
-import { map } from 'lodash-es'
-import { computed, reactive } from 'vue'
-import { onMounted } from 'vue'
+import { onMounted, reactive } from 'vue'
 
-const state = reactive({
-  endChatAni: computed(() => state.line == state.chat.line[state.chatIndex]),
-  contentIndex: 0,
-  chatIndex: 0,
-  img: { left: '', right: '', center: '' },
+const state: TypeStepRsc = reactive({
+  rscList: [],
+  place: { name: '', src: '', x: 0, y: 0 },
   actor: '',
-  line: [],
-  chat: {
-    actor: '',
-    img: '',
-    line: ''
-  },
-  imgSrc: ''
+  chat: ''
 })
-onMounted(async () => await nextChat())
 
-const skipChat = () => {
-  const endChat = state.chatIndex + 1 >= state.chat.line.length
-  if (state.endChatAni && endChat) {
-    state.contentIndex += 1
-    state.chatIndex = 0
-    nextChat()
-  }
-  if (state.endChatAni && !endChat) {
-    state.chatIndex += 1
-    nextChat()
-  }
+onMounted(() => (useSceneStore.editMode = true))
+
+const uploadBg = (src: string) => {
+  state.place.src = src
+}
+const uploadActor = ({ src, name }: { src: string; name: string }) => {
+  state.rscList.push({ name, src, x: 0, y: 0 })
 }
 
-const nextChat = async () => {
-  if (!useSceneStore.scene.content[state.contentIndex]) {
-    console.log(useSceneStore.scene.content[state.contentIndex - 1])
-    const { ok, data } = await dbManager.getScene(
-      useSceneStore.scene.content[state.contentIndex - 1].next
-    )
-    state.contentIndex = 0
-    console.log({ ok, data })
-    useSceneStore.scene = JSON.parse(data)
-  }
-  state.chat = useSceneStore.scene.content[state.contentIndex]
-  state.img = { left: '', right: '', center: '' }
-  state.line = state.chat.line[state.chatIndex]
-  if (useSceneStore.img[state.chat.placeImg]) state.imgSrc = useSceneStore.img[state.chat.placeImg]
-  else {
-    const { data } = await dbManager.readFile(state.chat.placeImg)
-    useSceneStore.img[state.chat.placeImg] = data
-    state.imgSrc = data
-  }
-
-  const left = useSceneStore.img[state.chat.img.left]
-  if (state.chat.img.left && left) state.img.left = left
-  if (state.chat.img.left && !left) {
-    const { data } = await dbManager.readFile(state.chat.img.left)
-    useSceneStore.img[state.chat.img.left] = data
-    state.img.left = data
-  }
-
-  const right = useSceneStore.img[state.chat.img.right]
-  if (state.chat.img.right && right) state.img.right = right
-  if (state.chat.img.right && !right) {
-    const { data } = await dbManager.readFile(state.chat.img.right)
-    useSceneStore.img[state.chat.img.right] = data
-    state.img.right = data
-  }
-
-  const center = useSceneStore.img[state.chat.img.center]
-  if (state.chat.img.center && center) state.img.center = center
-  if (state.chat.img.center && !center) {
-    const { data } = await dbManager.readFile(state.chat.img.center)
-    useSceneStore.img[state.chat.img.center] = data
-    state.img.center = data
-  }
+const save = () => {
+  console.log(useSceneStore.saveData)
 }
 </script>
 
 <template>
-  <div class="flex justify-center items-center w-full h-full">
+  <div class="relative flex flex-col flex-wrap w-full h-full">
     <div
-      class="overflow-hidden relative flex flex-col justify-end w-[1280px] h-[720px] border-2 bg-black"
+      class="relative overflow-hidden flex flex-col justify-end !w-[1280px] !h-[720px] border-2 bg-black"
     >
-      <p class="absolute z-10 p-2 bg-black text-white top-0 left-0">
-        {{ state.chat.place }}
-      </p>
-      <img :src="state.imgSrc" alt="배경이미지" class="absolute top-0 left-0 w-auto h-full" />
-      <img
-        v-if="state.chat.img.left"
-        :src="state.img.left"
-        alt="왼쪽캐릭터"
-        class="absolute top-0 left-0 w-auto h-full"
+      <t-game-screen
+        :place-data="state.place"
+        :rsc-list="state.rscList"
+        :actor="state.actor"
+        :chat="state.chat"
       />
-      <img
-        v-if="state.chat.img.right"
-        :src="state.img.right"
-        alt="오른쪽캐릭터"
-        class="absolute top-0 right-0 w-auto h-full"
-      />
-      <img
-        v-if="state.chat.img.center"
-        :src="state.img.center"
-        alt="가운데캐릭터"
-        class="absolute top-0 left-1/2 -ml-[260px] w-auto h-full"
-      />
-      <div
-        class="relative w-full h-[200px] text-white flex flex-col text-xl"
-        @click.prevent="skipChat"
+      <button
+        class="absolute top-0 right-0 w-20 h-10 border rounded bg-sky-400 hover:bg-sky-600"
+        @click="save"
       >
-        <p class="realative z-10 h-10">{{ state.chat.actor ? `${state.chat.actor}:` : ' ' }}</p>
-        <p class="realative z-10 flex-1 px-10">
-          {{ state.line }}<span class="ml-2 animate-pulse">_</span>
-        </p>
-        <span
-          v-if="state.endChatAni"
-          class="absolute right-6 bottom-6 text-white animate-pulse text-4xl"
-          >▶</span
-        >
-        <div class="absolute w-full h-full bg-black opacity-60 left-0 top-0" />
-      </div>
+        저장
+      </button>
     </div>
+
+    <t-edit-tool @upload-bg="uploadBg" @upload-actor="uploadActor" />
   </div>
 </template>

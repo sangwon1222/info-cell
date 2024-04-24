@@ -1,6 +1,8 @@
 import { reactive } from 'vue'
 
-export const useSceneStore: { [key: string]: any } = reactive({
-  scene: [],
-  img: {}
+export const useSceneStore: TypeSceneStore = reactive({
+  sceneName: '',
+  events: [],
+  saveData: [],
+  editMode: false
 })

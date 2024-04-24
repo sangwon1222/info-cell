@@ -1,5 +1,5 @@
 <script setup lang="ts" scoped>
-import { useLayoutStore } from '../../store/loading'
+import { useLayoutStore } from '@/store/loading'
 </script>
 
 <template>

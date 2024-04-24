@@ -6,6 +6,10 @@ afterSign: scripts/notarize.js
 productName: INFO CELL
 files:
   - build/**/*
+  - {
+    "from": "db/*",
+    "to": "db/*",
+  }
 mac:
   gatekeeperAssess: false
   hardenedRuntime: true

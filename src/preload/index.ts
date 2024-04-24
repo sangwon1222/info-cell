@@ -1,8 +1,8 @@
 import { ElectronAPI, electronAPI } from '@electron-toolkit/preload'
 import { contextBridge, ipcRenderer } from 'electron'
-import DBApi from './api/DBApi'
+import JsonApi from './api/JsonApi'
 
-const DBapi = new DBApi(ipcRenderer)
+const jsonApi = new JsonApi(ipcRenderer)
 
 interface TypeApi {
   [key: string]: any
@@ -12,9 +12,7 @@ declare global {
   interface Window {
     electron?: ElectronAPI
     api?: any
-    DBapi: TypeApi
-    Serialapi: TypeApi
-    TCPapi: TypeApi
+    jsonApi: TypeApi
     openDevTool: TypeApi
     version: TypeApi
   }
@@ -29,13 +27,13 @@ if (process.contextIsolated) {
     contextBridge.exposeInMainWorld('version', {
       getVersion: () => ipcRenderer.invoke('getVersion')
     })
-    contextBridge.exposeInMainWorld('DBapi', DBapi)
+    contextBridge.exposeInMainWorld('DBapi', jsonApi)
   } catch (error) {
     console.error(error)
   }
 } else {
   window.electron = electronAPI as ElectronAPI
-  window.DBapi = DBapi as TypeApi
+  window.jsonApi = jsonApi as TypeApi
   window.openDevTool = { openDevTools: () => ipcRenderer.invoke('openDevTools') } as TypeApi
   window.version = { getVersion: () => ipcRenderer.invoke('getVersion') } as TypeApi
 }

@@ -5,7 +5,7 @@ import icon from '../../resources/64x64.png?asset'
 import ApplicationMenu from './appMenu/menu'
 import MeddleWare from './middleWare'
 import tray from './tray/tray'
-import DBbase from './util/DBbase'
+import JsonApi from './util/JsonApi'
 
 const createWindow = async () => {
   const mainWindow = new BrowserWindow({
@@ -44,7 +44,7 @@ const createWindow = async () => {
   })
 
   const mw = new MeddleWare(mainWindow.webContents)
-  await mw.registMiddleware(DBbase, 'DB')
+  await mw.registMiddleware(JsonApi, 'jsonApi')
 
   ipcMain.handle('openDevTools', () => {
     mainWindow.webContents.openDevTools()
@@ -85,6 +85,5 @@ app.whenReady().then(() => {
 app.on('window-all-closed', async () => {
   console.log('window-all-closed', process.platform)
   if (process.platform === 'darwin') return
-  await DBbase._disconnectDB()
   app.quit()
 })

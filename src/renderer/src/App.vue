@@ -1,24 +1,17 @@
 <script setup lang="ts" scoped>
 import { useLayoutStore } from '@/store/loading'
-import dbManager from '@/util/dbManager'
 import tLoading from '@template/tLoading.vue'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import { useSceneStore } from './store/scene'
+import jsonApi from './util/jsonApi'
 const router = useRouter()
 const toast = useToast()
 
 onMounted(async () => {
   useLayoutStore.isLoading = true
-  const { ok, data } = await dbManager.getScene('#1')
-  if (ok) {
-    useSceneStore.scene = JSON.parse(data)
-    console.log(useSceneStore.scene)
-  } else {
-    useSceneStore.scene = []
-    toast.error('씬 데이터가 없습니다.')
-  }
+  window.openDevTool.openDevTools()
+  await jsonApi.connect()
   useLayoutStore.isLoading = false
 })
 </script>

@@ -1,0 +1,18 @@
+{
+  "events": [
+    {
+      "place": "하린의 방",
+      "img": { "place": "harin-room.png", "left": "", "right": "", "center": "harin.png" },
+      "type": "chat",
+      "actor": "",
+      "chat": "아파트는 아늑하면서도 아날로그적인 취향이 가득하다."
+    },
+    {
+      "place": "하린의 방",
+      "img": { "place": "harin-room.png", "left": "", "right": "", "center": "harin.png" },
+      "type": "chat",
+      "actor": "",
+      "chat": "벽에는 수많은 책과 레코드판이 정리되어 있고, 고풍스러운 타자기가 한 쪽 구석에 자리잡고 있다."
+    }
+  ]
+}
