@@ -40,7 +40,46 @@ class jsonApi {
 
   async uploadRsc({ path, name }: { path: string; name: string }) {
     try {
+      const search = await window.jsonApi.getRsc(name)
+      if (search.ok && !confirm('같은 이름의 리소스가 존재합니다. 덮어씌우겠습니까?')) return
       const result = await window.jsonApi.uploadRsc({ path, name })
+      return result
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  }
+
+  async getActorList() {
+    try {
+      const result = await window.jsonApi.getActorList()
+      return result
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  }
+  async getItemList() {
+    try {
+      const result = await window.jsonApi.getItemList()
+      return result
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  }
+  async getRscList() {
+    try {
+      const result = await window.jsonApi.getRscList()
+      return result
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  }
+  async getInventoryData() {
+    try {
+      const result = await window.jsonApi.getInventoryData()
       return result
     } catch (e) {
       console.error(e)

@@ -1,7 +1,5 @@
 <script setup lang="ts" scoped>
 import { useSceneStore } from '@/store/scene'
-
-const props = withDefaults(defineProps<{ place: string }>(), { place: '' })
 </script>
 
 <!-- 부모 컴포넌트 => components/template/tGameScreen.vue -->
@@ -11,12 +9,12 @@ const props = withDefaults(defineProps<{ place: string }>(), { place: '' })
       <label for="scene-name">씬 이름: </label>
       <input id="scene-name" type="text" :value="useSceneStore.sceneName" />
       <label for="place-name">장소: </label>
-      <input id="scene-name" type="text" :value="props.place" />
+      <input id="place-name" type="text" :value="useSceneStore.placeName" />
     </span>
 
-    <span v-if="useSceneStore.editMode">
+    <span>
       <span> 장소: </span>
-      <span v-if="props.place"> {{ props.place }} </span>
+      <span> {{ useSceneStore.sceneName }} </span>
     </span>
   </p>
 </template>

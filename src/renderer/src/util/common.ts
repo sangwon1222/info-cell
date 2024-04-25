@@ -1,3 +1,7 @@
+import { useDataStore } from '@/store/data'
+import { find } from 'lodash-es'
+import jsonApi from './jsonApi'
+
 export const groupLog = (ok: boolean, label: string, ary: string[]) => {
   const color = ok ? 'color:#000000; background: #5eead4;' : 'color:#fff; background: #ef4444;'
   const subColor = ok ? 'color:#ffffff; background: #35796e;' : 'color:#fff; background: #7b1616;'
@@ -18,18 +22,40 @@ export const cmdLog = (label: string, ary: string[]) => {
   console.groupEnd()
 }
 
-export const hex2a = (hexx: string) => {
-  let str = ''
-  for (let i = 0; i < hexx.length; i += 2)
-    str += String.fromCharCode(parseInt(hexx.substr(i, 2), 16))
-  return str
+export const updateActorList = async () => {
+  const actorData = await jsonApi.getActorList()
+  if (actorData.ok) useDataStore.actorList = actorData.data
+}
+export const updateItemList = async () => {
+  const itemData = await jsonApi.getItemList()
+  if (itemData.ok) useDataStore.itemList = itemData.data
+}
+export const updateRscList = async () => {
+  const actorData = await jsonApi.getRscList()
+  if (actorData.ok) useDataStore.rscList = actorData.data
+}
+export const updateInventory = async () => {
+  const inventoryData = await jsonApi.getInventoryData()
+  if (inventoryData.ok) useDataStore.inventory = inventoryData.data
 }
 
-export const ascii_to_hex = (str: string) => {
-  const arr1 = [] as any
-  for (let n = 0, l = str.length; n < l; n++) {
-    const hex = Number(str.charCodeAt(n)).toString(16)
-    arr1.push(hex)
+export const getRscData = async (idList: number[]) => {
+  try {
+    for (let i = 0; i < idList.length; i++) {
+      const id = idList[i]
+      const seactRsc = find(useDataStore.rscList, (rsc) => rsc.id == id)
+
+      if (useDataStore.cacheRsc[seactRsc.name]) continue
+
+      const { ok, data } = await jsonApi.getRsc(seactRsc.src)
+      if (ok) {
+        useDataStore.cacheRsc[seactRsc.name] = { id: seactRsc.id, name: seactRsc.name, src: data }
+        return { src: data, name: seactRsc.name }
+      } else {
+        return { src: '', name: '' }
+      }
+    }
+  } catch (e) {
+    return { src: '', name: '' }
   }
-  return arr1.join('')
 }

@@ -39,4 +39,26 @@ export default class JsonApi {
       this.mIpcRenderer.invoke('uploadRsc', [{ path, name }]).then((result) => resolve(result))
     })
   }
+
+  async getActorList(): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      this.mIpcRenderer.invoke('getActorList').then((result) => resolve(result))
+    })
+  }
+  async getItemList(): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      this.mIpcRenderer.invoke('getItemList').then((result) => resolve(result))
+    })
+  }
+
+  async getRscList(): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      this.mIpcRenderer.invoke('getRscList').then((result) => resolve(result))
+    })
+  }
+  async getInventoryData(): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      this.mIpcRenderer.invoke('getInventoryData').then((result) => resolve(result))
+    })
+  }
 }

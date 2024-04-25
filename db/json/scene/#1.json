@@ -1,0 +1,193 @@
+{
+  "script": [
+    {
+      "type": "chat",
+      "actor": "",
+      "chat": "아파트는 아늑하면서도 아날로그적인 취향이 가득하다.",
+      "placeId": 0,
+      "img": []
+    },
+    {
+      "type": "chat",
+      "actor": "",
+      "chat": "벽에는 수많은 책과 레코드판이 정리되어 있고, 고풍스러운 타자기가 한 쪽 구석에 자리잡고 있다.",
+      "placeId": 0,
+      "img": []
+    },
+    {
+      "type": "chat",
+      "actor": "",
+      "chat": "TV에서 소리가 흘러 나온다.",
+      "placeId": 0,
+      "img": []
+    },
+    {
+      "type": "chat",
+      "actor": "유정혁",
+      "chat": "안녕하십니까, 여러분. <에온> 대표 유정혁입니다.",
+
+      "placeId": 0,
+      "img": []
+    },
+    {
+      "type": "chat",
+      "actor": "유정혁",
+      "chat": "오늘 저는 여러분께 인포셀의 놀라운 성과와 그 가능성에 대해 말씀드리고자 합니다.",
+      "placeId": 0,
+      "img": []
+    },
+    {
+      "type": "chat",
+      "actor": "유정혁",
+      "chat": "현재 인포셀의 점유율은 인구의 70%를 넘어섰습니다. ",
+      "placeId": 0,
+      "img": []
+    },
+    {
+      "type": "chat",
+      "actor": "유정혁",
+      "chat": "이는 인포셀이 단순한 기술을 넘어, 우리 생활의 필수 요소가 되었음을 의미합니다.",
+      "placeId": 0,
+      "img": []
+    },
+    {
+      "type": "chat",
+      "actor": "유하린",
+      "chat": "세상은 너무나 빠르게 변했어. 나만 시간에 뒤처진 채 남겨진 것 같아...",
+      "placeId": 0,
+      "img": [{ "id": 0, "start": { "x": 0, "y": 0 }, "x": 0, "y": 0 }]
+    },
+    {
+      "type": "chat",
+      "actor": "",
+      "chat": "하린이 창가로 걸어가 밖을 내다본다.",
+      "placeId": 0,
+      "img": [{ "id": 0, "start": { "x": 0, "y": 0 }, "x": 0, "y": 0 }]
+    },
+    {
+      "type": "chat",
+      "actor": "",
+      "chat": "주변은 인포셀에 몰두한 사람들로 가득 차 있다. 각각의 사람들은 인포셀을 사용하며 각자의 세계에 빠져있다.",
+      "placeId": 2,
+      "img": []
+    },
+    {
+      "type": "chat",
+      "actor": "유하린",
+      "chat": "세계 인구의 70%가 넘는 사람들이 인포셀을 사용하고 있어. 나는 점점 더 고립되어 가고 있는 것 같아.",
+      "placeId": 2,
+      "img": [{ "id": 0, "start": { "x": 0, "y": 0 }, "x": 0, "y": 0 }]
+    },
+    {
+      "type": "chat",
+      "actor": "",
+      "chat": "누군가 하린에게 다가온다.",
+      "placeId": 2,
+      "img": [{ "id": 0, "start": { "x": 0, "y": 0 }, "x": 0, "y": 0 }]
+    },
+    {
+      "type": "chat",
+      "actor": "유하린",
+      "script": "뭐... 뭐야!?",
+      "placeId": 2,
+      "img": [
+        { "id": 0, "start": { "x": 0, "y": 0 }, "x": 0, "y": 0 },
+        { "id": 1, "start": { "x": 0, "y": 0 }, "x": 0, "y": 0 }
+      ]
+    },
+    {
+      "type": "interaction",
+      "examine": [
+        {
+          "id": 0,
+          "placeId": 2,
+          "isShow": true,
+          "isComplete": false,
+          "rect": { "x": 0, "y": 0, "w": 0, "h": 0 },
+          "script": [
+            {
+              "actor": "유하린",
+              "chat": "이상한 사람들이네.. 다 같이 프래저로 이동한다! 따라가볼까...?",
+              "placeId": 2
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "placeId": 3,
+          "isShow": true,
+          "isComplete": false,
+          "rect": { "x": 0, "y": 0, "w": 0, "h": 0 },
+          "script": [
+            {
+              "actor": "유하린",
+              "chat": "이게 뭐지?? 일단 챙겨보자",
+              "placeId": 2,
+              "itemId": 2
+            }
+          ]
+        }
+      ],
+      "move": [
+        {
+          "id": 0,
+          "isShow": true,
+          "condition": { "type": "", "id": 0, "able": "" },
+          "placeId": 0
+        },
+        {
+          "id": 1,
+          "isShow": true,
+          "condition": { "type": "", "id": 0, "able": "" },
+          "placeId": 1
+        },
+        {
+          "id": 2,
+          "isShow": true,
+          "condition": { "type": "", "id": 0, "able": "" },
+          "placeId": 2
+        },
+        {
+          "id": 3,
+          "isShow": false,
+          "condition": { "type": "examine", "id": 0, "able": "isComplete" },
+          "placeId": 3
+        }
+      ],
+      "talk": [
+        {
+          "id": 0,
+          "label": "example",
+          "isShow": true,
+          "isComplete": false,
+          "script": [
+            {
+              "actor": "",
+              "chat": "TEST",
+              "placeId": 0,
+              "img": []
+            }
+          ]
+        }
+      ],
+      "use": [
+        {
+          "id": 0,
+          "isShow": true,
+          "isComplete": false,
+          "script": [
+            {
+              "actor": "???",
+              "chat": "뭐 어쩌라고",
+              "placeId": 2,
+              "img": [
+                { "id": 0, "start": { "x": 0, "y": 0 }, "x": 0, "y": 0 },
+                { "id": 1, "start": { "x": 0, "y": 0 }, "x": 0, "y": 0 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

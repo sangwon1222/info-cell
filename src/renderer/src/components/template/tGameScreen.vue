@@ -2,25 +2,16 @@
 import aActor from '@/components/atoms/screen/aActor.vue'
 import aBg from '@/components/atoms/screen/aBg.vue'
 import aChat from '@/components/atoms/screen/aChat.vue'
-const props = withDefaults(
-  defineProps<{
-    rscList: {
-      name: string
-      src: string
-      x: number
-      y: number
-    }[]
-    placeData: any
-    actor: string
-    chat: string
-  }>(),
-  {
-    placeData: { name: '', src: '', x: 0, y: 0 },
-    actor: '',
-    chat: '',
-    rscList: () => [{ name: '', src: '', x: 0, y: 0 }]
-  }
-)
+interface TypeProps {
+  actor: string
+  chat: string
+}
+
+defineEmits(['next'])
+const props = withDefaults(defineProps<TypeProps>(), {
+  actor: '',
+  chat: ''
+})
 </script>
 
 <!-- 부모 컴포넌트 => page/admin.vue -->
@@ -28,7 +19,7 @@ const props = withDefaults(
   <div
     class="relative overflow-hidden flex flex-col justify-end !w-[1280px] !h-[720px] border-2 bg-black"
   >
-    <a-bg :bg-data="props.placeData" />
+    <a-bg />
     <a-actor
       v-for="(v, i) in props.rscList"
       :key="`${i}-${v.name}`"
@@ -39,6 +30,6 @@ const props = withDefaults(
       :src="v.src"
     />
 
-    <a-chat :actor="props.actor" :chat="props.chat" />
+    <a-chat :actor="props.actor" :chat="props.chat" @next="$emit('next')" />
   </div>
 </template>

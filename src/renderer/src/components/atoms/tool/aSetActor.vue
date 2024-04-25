@@ -22,13 +22,14 @@ const uploadRsc = async (e) => {
     console.log(e)
   } finally {
     if (useLayoutStore.loadingText == '이미지 업로드') useLayoutStore.isLoading = false
+    target.value = null
   }
 }
 </script>
 
 <!-- 부모 컴포넌트 => components/template/tool/tEditTool.vue -->
 <template>
-  <div class="flex items-center gap-2 text-black border">
+  <div class="flex items-center gap-2 text-black bg-gray-300 border">
     <label for="rscfile">캐릭터 추가: </label>
     <input
       id="file"
@@ -38,5 +39,8 @@ const uploadRsc = async (e) => {
       accept="image/png"
       @change="uploadRsc"
     />
+    <div class="flex flex-col">
+      <!-- <p v-for="(v,i) in use."></p> -->
+    </div>
   </div>
 </template>

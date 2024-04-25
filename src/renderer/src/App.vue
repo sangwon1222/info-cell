@@ -1,9 +1,11 @@
 <script setup lang="ts" scoped>
+import { useDataStore } from '@/store/data'
 import { useLayoutStore } from '@/store/loading'
 import tLoading from '@template/tLoading.vue'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
+import { updateActorList, updateInventory, updateItemList, updateRscList } from './util/common'
 import jsonApi from './util/jsonApi'
 const router = useRouter()
 const toast = useToast()
@@ -12,6 +14,17 @@ onMounted(async () => {
   useLayoutStore.isLoading = true
   window.openDevTool.openDevTools()
   await jsonApi.connect()
+
+  await updateActorList()
+  await updateItemList()
+  await updateRscList()
+  await updateInventory()
+
+  const rscData = await jsonApi.getRscList()
+  if (rscData.ok) useDataStore.rscList = rscData.data
+  const inventoryData = await jsonApi.getInventoryData()
+  if (inventoryData.ok) useDataStore.inventory = inventoryData.data
+
   useLayoutStore.isLoading = false
 })
 </script>

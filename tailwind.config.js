@@ -16,6 +16,15 @@ module.exports = {
     },
 
     extend: {
+      animation: {
+        typing: 'typing 2s  forwards'
+      },
+      keyframes: {
+        typing: {
+          from: { width: 0 },
+          to: { width: '100%' }
+        }
+      },
       rotate: {
         135: '135deg',
         225: '225deg'

@@ -9,7 +9,8 @@ interface TypeDBResponse {
 }
 
 const path = './db'
-const jsonPath = `${path}/json`
+const sceneDataPath = `${path}/json/scene`
+const gameDataPath = `${path}/json/data`
 const rscPath = `${path}/rsc`
 class JsonApi implements TypeMiddleware {
   async _check() {
@@ -27,7 +28,7 @@ class JsonApi implements TypeMiddleware {
   async _connect(): Promise<TypeDBResponse> {
     try {
       if (!fs.existsSync(path)) fs.mkdirSync(path)
-      if (!fs.existsSync(jsonPath)) fs.mkdirSync(jsonPath)
+      if (!fs.existsSync(sceneDataPath)) fs.mkdirSync(sceneDataPath)
       if (!fs.existsSync(rscPath)) fs.mkdirSync(rscPath)
 
       return { ok: true, data: [], msg: 'JSON DATA' }
@@ -39,7 +40,7 @@ class JsonApi implements TypeMiddleware {
   async getSceneList(): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
       try {
-        const files = fs.readdirSync(jsonPath)
+        const files = fs.readdirSync(sceneDataPath)
         const data: string[] = []
         for (let i = 0; i < files.length; i++) {
           const file = files[i]
@@ -56,7 +57,7 @@ class JsonApi implements TypeMiddleware {
   async getScene(scene): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
       try {
-        fs.readFile(jsonPath + '/' + scene + '.json', function (err, buf) {
+        fs.readFile(sceneDataPath + '/' + scene + '.json', function (err, buf) {
           if (err) return resolve({ ok: false, data: [], msg: '조회 실패' })
           const data = JSON.parse(buf)
           resolve({ ok: true, data, msg: '조회 성공' })
@@ -67,20 +68,11 @@ class JsonApi implements TypeMiddleware {
     })
   }
 
-  async getRscList(file: string): Promise<TypeDBResponse> {
-    return new Promise((resolve, _reject) => {
-      try {
-        const files = fs.readdirSync(rscPath).split(',')
-        resolve({ ok: true, data: files })
-      } catch (e) {
-        resolve({ ok: false, msg: `${e}`, data: '' })
-      }
-    })
-  }
-
   async getRsc(file: string): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
-      const name = `${rscPath}/${file.replaceAll(`"`, '')}`
+      // const name = `${rscPath}/${file.replaceAll(`"`, '')}`
+      console.log(file)
+      const name = `${rscPath}/${file}`
       try {
         const base64 = fs.readFileSync(name, 'base64')
         const data = 'data:image/png;base64, ' + base64.toString('base64')
@@ -115,6 +107,62 @@ class JsonApi implements TypeMiddleware {
       }
     })
   }
+
+  async getActorList(): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      try {
+        fs.readFile(`${gameDataPath}/actorList.json`, function (err, buf) {
+          if (err) return resolve({ ok: false, data: [], msg: '조회 실패' })
+          const data = JSON.parse(buf).actorList
+          resolve({ ok: true, data, msg: '조회 성공' })
+        })
+      } catch (e) {
+        resolve({ ok: false, data: '', msg: `${e}` })
+      }
+    })
+  }
+  async getItemList(): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      try {
+        fs.readFile(`${gameDataPath}/itemList.json`, function (err, buf) {
+          if (err) return resolve({ ok: false, data: [], msg: '조회 실패' })
+          const data = JSON.parse(buf).itemList
+          resolve({ ok: true, data, msg: '조회 성공' })
+        })
+      } catch (e) {
+        resolve({ ok: false, data: '', msg: `${e}` })
+      }
+    })
+  }
+  async getRscList(): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      try {
+        fs.readFile(`${gameDataPath}/rscList.json`, function (err, buf) {
+          if (err) return resolve({ ok: false, data: [], msg: '조회 실패' })
+          const data = JSON.parse(buf).rscList
+          resolve({ ok: true, data, msg: '조회 성공' })
+        })
+      } catch (e) {
+        resolve({ ok: false, data: '', msg: `${e}` })
+      }
+    })
+  }
+
+  async getInventoryData(): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      try {
+        fs.readFile(`${gameDataPath}/inventory.json`, function (err, buf) {
+          if (err) return resolve({ ok: false, data: [], msg: '조회 실패' })
+          const data = JSON.parse(buf).inventory
+          resolve({ ok: true, data, msg: '조회 성공' })
+        })
+      } catch (e) {
+        resolve({ ok: false, data: '', msg: `${e}` })
+      }
+    })
+  }
+
+  x
 }
 
 export default new JsonApi()

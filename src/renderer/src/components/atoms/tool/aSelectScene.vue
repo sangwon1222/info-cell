@@ -27,33 +27,34 @@ const searchScene = async (e) => {
 const selectScene = async (e) => {
   useLayoutStore.isLoading = true
   const target = e.currentTarget as HTMLLIElement
-  if (target.id) {
-    const { ok, data } = await jsonApi.getScene(target.id)
-    console.log({ ok, data })
-    if (ok) emit('get-scene-data', data.events, target.id)
+  const sceneName = target.id
+
+  if (sceneName) {
+    const { ok, data } = await jsonApi.getScene(sceneName)
+    if (ok) emit('get-scene-data', { eventList: data.script, sceneName })
     else toast.error('데이터 조회 실패')
   } else {
-    emit('get-scene-data', [], '')
+    emit('get-scene-data', { eventList: [], sceneName })
   }
   useLayoutStore.isLoading = false
 }
 
 const moveEvent = (event) => {
-  console.log(event)
+  console.log('moveEvent', event)
 }
 </script>
 
 <!-- 부모 컴포넌트 => components/template/tool/tEditTool.vue -->
 <template>
   <div class="flex flex-col">
-    <ul v-if="useSceneStore.events.length" class="w-full h-[40px] overflow-x-auto flex">
+    <ul class="w-full h-[40px] overflow-x-auto flex">
       <li
-        v-for="(v, i) in useSceneStore.events"
+        v-for="(v, i) in useSceneStore.eventList"
         :key="`${useSceneStore.sceneName}-event-${i}`"
         class="px-2 bg-gray-100 border cursor-pointer hover:bg-red-100"
         @click="moveEvent(v)"
       >
-        {{ v.type }}-{{ i }}
+        {{ (v as TypeInterActiveEvents | TypeChatEvents).type }}-{{ i }}
       </li>
     </ul>
 
