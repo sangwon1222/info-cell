@@ -17,9 +17,14 @@ module.exports = {
 
     extend: {
       animation: {
-        typing: 'typing 2s  forwards'
+        typing: 'typing 2s  forwards',
+        fadeIn: 'fadeIn 0.5s  forwards'
       },
       keyframes: {
+        fadeIn: {
+          from: { opacity: 0 },
+          to: { opacity: 1 }
+        },
         typing: {
           from: { width: 0 },
           to: { width: '100%' }

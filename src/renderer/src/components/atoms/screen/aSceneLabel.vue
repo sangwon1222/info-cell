@@ -9,12 +9,12 @@ import { useSceneStore } from '@/store/scene'
       <label for="scene-name">씬 이름: </label>
       <input id="scene-name" type="text" :value="useSceneStore.sceneName" />
       <label for="place-name">장소: </label>
-      <input id="place-name" type="text" :value="useSceneStore.placeName" />
+      <input id="place-name" type="text" :value="useSceneStore.gameScreen.place.name" />
     </span>
 
     <span>
       <span> 장소: </span>
-      <span> {{ useSceneStore.sceneName }} </span>
+      <span> {{ useSceneStore.gameScreen.place.name }} </span>
     </span>
   </p>
 </template>

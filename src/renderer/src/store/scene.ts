@@ -2,10 +2,18 @@ import { reactive } from 'vue'
 
 export const useSceneStore: TypeSceneStore = reactive({
   sceneName: '',
-  place: { name: '', src: '' },
+  gameScreen: {
+    place: { id: -1, data: '', start: { x: 0, y: 0 }, x: 0, y: 0, name: '', src: '' },
+    actor: []
+  },
   eventList: [],
-  event: { type: '', actor: '', chat: [], placeId: -1, img: [] },
+  event: {},
   saveData: [],
   editMode: false,
-  currentSceneIndex: 0
+  eventIndex: 0
 })
+
+// gameScreen: {
+//   place: { id: -1, data: '', start: { x: 0, y: 0 }, x: 0, y: 0, name: '', src: '' },
+//   actor: [{ id: -1, data: '', start: { x: 0, y: 0 }, x: 0, y: 0, name: '', src: '' }]
+// },

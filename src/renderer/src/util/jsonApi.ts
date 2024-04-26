@@ -1,3 +1,5 @@
+import { useSceneStore } from '@/store/scene'
+
 class jsonApi {
   async connect() {
     try {
@@ -80,6 +82,24 @@ class jsonApi {
   async getInventoryData() {
     try {
       const result = await window.jsonApi.getInventoryData()
+      return result
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  }
+
+  async updateSceneData() {
+    try {
+      const { sceneName, event, eventIndex } = useSceneStore
+      useSceneStore.eventList[eventIndex] = event
+      const result = await window.jsonApi.updateSceneData(
+        sceneName,
+        `{
+          "script":${JSON.stringify(useSceneStore.eventList)}
+        }
+          `
+      )
       return result
     } catch (e) {
       console.error(e)

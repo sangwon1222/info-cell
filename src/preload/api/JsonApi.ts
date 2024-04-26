@@ -61,4 +61,12 @@ export default class JsonApi {
       this.mIpcRenderer.invoke('getInventoryData').then((result) => resolve(result))
     })
   }
+
+  async updateSceneData(sceneName: string, event: string): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      this.mIpcRenderer
+        .invoke('updateSceneData', [sceneName, event])
+        .then((result) => resolve(result))
+    })
+  }
 }

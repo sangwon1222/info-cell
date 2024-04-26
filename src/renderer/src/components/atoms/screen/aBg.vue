@@ -7,9 +7,8 @@ import { useSceneStore } from '@/store/scene'
 <template>
   <a-scene-label />
   <img
-    :id="useSceneStore.place.name"
-    :src="useSceneStore.place.src"
-    :alt="useSceneStore.place.name"
+    :src="useSceneStore.gameScreen.place.data"
+    :alt="useSceneStore.gameScreen.place.name"
     class="absolute top-0 left-0 h-[720px] w-[1280px]"
   />
 </template>

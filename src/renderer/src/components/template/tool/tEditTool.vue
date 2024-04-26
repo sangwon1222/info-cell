@@ -2,6 +2,7 @@
 import aSelectScene from '@/components/atoms/tool/aSelectScene.vue'
 import aSetActor from '@/components/atoms/tool/aSetActor.vue'
 import aSetBg from '@/components/atoms/tool/aSetBg.vue'
+import { uploadActor, uploadBg } from '@/util/common'
 
 const emit = defineEmits(['upload-bg', 'upload-actor', 'select-scene'])
 </script>
@@ -11,9 +12,9 @@ const emit = defineEmits(['upload-bg', 'upload-actor', 'select-scene'])
   <div class="relative flex flex-col w-full">
     <!-- 편집 툴 -->
     <div class="flex gap-2">
-      <a-set-bg @upload-bg="$emit('upload-bg', $event)" />
-      <a-set-actor @upload-actor="$emit('upload-actor', $event)" />
+      <a-set-bg @upload-bg="uploadBg" />
+      <a-set-actor @upload-actor="uploadActor" />
     </div>
-    <a-select-scene @get-scene-data="$emit('select-scene', $event)" />
+    <a-select-scene />
   </div>
 </template>

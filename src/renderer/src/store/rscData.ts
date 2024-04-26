@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
 
-export const useDataStore = reactive({
+export const useRscDataStore = reactive({
   itemList: [],
   inventory: [],
   rscList: [],

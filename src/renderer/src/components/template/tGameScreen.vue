@@ -1,35 +1,39 @@
 <script setup lang="ts" scoped>
-import aActor from '@/components/atoms/screen/aActor.vue'
+import aExamineBtn from '@/components/atoms/aExamineBtn.vue'
 import aBg from '@/components/atoms/screen/aBg.vue'
 import aChat from '@/components/atoms/screen/aChat.vue'
-interface TypeProps {
-  actor: string
-  chat: string
-}
+import aImgList from '@/components/atoms/screen/aImgList.vue'
+import { useSceneStore } from '@/store/scene'
+import { next } from '@/util/common'
+import { map } from 'lodash-es'
+import { computed, reactive } from 'vue'
 
-defineEmits(['next'])
-const props = withDefaults(defineProps<TypeProps>(), {
-  actor: '',
-  chat: ''
+const state = reactive({
+  imgPos: computed(() =>
+    map(useSceneStore.gameScreen.actor, (e) => {
+      if (e.x == 0 && e.y == 0) return { x: 1280 / 2, y: 720 / 2 }
+      return {
+        x: e.x,
+        y: e.y
+      }
+    })
+  )
 })
+const onClick = async () => {
+  if (useSceneStore.editMode) return
+  await next()
+}
 </script>
 
-<!-- 부모 컴포넌트 => page/admin.vue -->
 <template>
   <div
     class="relative overflow-hidden flex flex-col justify-end !w-[1280px] !h-[720px] border-2 bg-black"
+    :class="useSceneStore.editMode ? 'cursor-default' : 'cursor-pointer'"
+    @click="onClick"
   >
+    <a-examine-btn />
     <a-bg />
-    <a-actor
-      v-for="(v, i) in props.rscList"
-      :key="`${i}-${v.name}`"
-      :index="i"
-      :name="v.name"
-      :x="v.x"
-      :y="v.y"
-      :src="v.src"
-    />
-
-    <a-chat :actor="props.actor" :chat="props.chat" @next="$emit('next')" />
+    <a-img-list :img-pos="state.imgPos" />
+    <a-chat />
   </div>
 </template>

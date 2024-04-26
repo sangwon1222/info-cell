@@ -1,6 +1,7 @@
 <script setup lang="ts" scoped>
 import { useLayoutStore } from '@/store/loading'
 import { useSceneStore } from '@/store/scene'
+import { setGameData, setSceneData } from '@/util/common'
 import jsonApi from '@/util/jsonApi'
 import { onMounted, reactive } from 'vue'
 import { useToast } from 'vue-toastification'
@@ -31,16 +32,22 @@ const selectScene = async (e) => {
 
   if (sceneName) {
     const { ok, data } = await jsonApi.getScene(sceneName)
-    if (ok) emit('get-scene-data', { eventList: data.script, sceneName })
+    if (ok) setSceneData({ eventList: data.script, sceneName })
     else toast.error('데이터 조회 실패')
   } else {
-    emit('get-scene-data', { eventList: [], sceneName })
+    setSceneData({ eventList: [], sceneName })
   }
   useLayoutStore.isLoading = false
 }
 
-const moveEvent = (event) => {
-  console.log('moveEvent', event)
+const moveEvent = async (i: number) => {
+  useSceneStore.eventIndex = i
+
+  await setGameData()
+}
+
+const addScene = () => {
+  toast.info('준비중')
 }
 </script>
 
@@ -51,8 +58,9 @@ const moveEvent = (event) => {
       <li
         v-for="(v, i) in useSceneStore.eventList"
         :key="`${useSceneStore.sceneName}-event-${i}`"
-        class="px-2 bg-gray-100 border cursor-pointer hover:bg-red-100"
-        @click="moveEvent(v)"
+        class="px-2 border cursor-pointer"
+        :class="i == useSceneStore.eventIndex ? 'bg-red-400' : 'bg-gray-100 hover:bg-red-100'"
+        @click="moveEvent(i)"
       >
         {{ (v as TypeInterActiveEvents | TypeChatEvents).type }}-{{ i }}
       </li>
@@ -61,9 +69,7 @@ const moveEvent = (event) => {
     <div class="flex flex-wrap gap-1">
       <input type="text" @keydown.enter="searchScene" />
       <ul class="w-full h-[40px] overflow-x-auto flex text-black">
-        <li class="px-2 bg-gray-100 border cursor-pointer hover:bg-red-100" @click="selectScene">
-          +
-        </li>
+        <li class="px-2 bg-gray-100 border cursor-pointer hover:bg-red-100" @click="addScene">+</li>
         <li
           v-for="(v, i) in state.list"
           :id="v"
