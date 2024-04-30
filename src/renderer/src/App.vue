@@ -53,7 +53,7 @@ onMounted(async () => {
       </button>
     </div>
     <div class="relative overflow-hidden flex w-full h-screen bg-[#485572] z-10 pt-[20px]">
-      <div class="w-full h-full">
+      <div class="w-full h-full min-w-[1280px]">
         <router-view />
       </div>
     </div>

@@ -3,10 +3,40 @@ import tGameScreen from '@/components/template/tGameScreen.vue'
 import { useSceneStore } from '@/store/scene'
 import { onMounted } from 'vue'
 onMounted(() => (useSceneStore.editMode = false))
+
+const fullScreen = () => {
+  const el = document.getElementById('game-screen') as HTMLDivElement
+  closeFull()
+  if (el.requestFullscreen) {
+    el.requestFullscreen()
+  } else if (el.webkitRequestFullscreen) {
+    /* Safari */
+    el.webkitRequestFullscreen()
+  } else if (el.msRequestFullscreen) {
+    /* IE11 */
+    el.msRequestFullscreen()
+  }
+}
+
+const closeFull = () => {
+  if (document?.exitFullscreen) {
+    document?.exitFullscreen()
+  } else if (document?.webkitExitFullscreen) {
+    /* Safari */
+    document?.webkitExitFullscreen()
+  } else if (document?.msExitFullscreen) {
+    /* IE11 */
+    document?.msExitFullscreen()
+  }
+}
 </script>
 
 <template>
-  <div class="relative flex flex-col flex-wrap w-full h-full">
+  <div
+    id="game-screen"
+    class="relative flex flex-col flex-wrap items-center justify-center w-full h-full"
+  >
+    <button class="fixed top-0 right-0 text-white text-9xl" @click="fullScreen">+</button>
     <t-game-screen />
   </div>
 </template>
