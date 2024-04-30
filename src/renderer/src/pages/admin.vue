@@ -12,13 +12,13 @@ onMounted(() => (useSceneStore.editMode = true))
     <t-game-screen />
     <t-edit-tool />
     <button
-      class="absolute top-0 right-0 w-20 h-10 border rounded bg-sky-400 hover:bg-sky-600"
+      class="absolute top-0 right-0 z-40 w-20 h-10 border rounded bg-sky-400 hover:bg-sky-600"
       @click="save"
     >
       저장
     </button>
     <button
-      class="absolute top-0 w-20 h-10 border rounded right-24 bg-sky-400 hover:bg-sky-600"
+      class="absolute top-0 z-40 w-20 h-10 border rounded right-24 bg-sky-400 hover:bg-sky-600"
       @click="next"
     >
       다음

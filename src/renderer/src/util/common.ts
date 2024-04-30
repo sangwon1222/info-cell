@@ -177,7 +177,8 @@ export const save = async () => {
   if (!event.type) return toast.error('이벤트가 없습니다.')
 
   useLayoutStore.isLoading = true
-  const { msg } = await jsonApi.updateSceneData()
+  const { msg, data } = await jsonApi.updateSceneData()
+  console.log(data)
   toast.info(msg)
   useLayoutStore.isLoading = false
 }

@@ -166,8 +166,8 @@ class JsonApi implements TypeMiddleware {
     return new Promise((resolve, _reject) => {
       try {
         fs.writeFile(`${sceneDataPath}/${sceneName}.json`, eventData, function (err, _buf) {
-          if (err) return resolve({ ok: false, data: [], msg: '업데이트 실패' })
-          resolve({ ok: true, data: '업데이트 성공', msg: '업데이트 성공' })
+          if (err) return resolve({ ok: false, data: eventData, msg: '업데이트 실패' })
+          resolve({ ok: true, data: eventData, msg: '업데이트 성공' })
         })
       } catch (e) {
         resolve({ ok: false, data: '', msg: `${e}` })

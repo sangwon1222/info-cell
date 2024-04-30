@@ -1,5 +1,5 @@
 <script setup lang="ts" scoped>
-import aExamineBtn from '@/components/atoms/aExamineBtn.vue'
+import aInteractionBtn from '@/components/atoms/aInteractionBtn.vue'
 import aBg from '@/components/atoms/screen/aBg.vue'
 import aChat from '@/components/atoms/screen/aChat.vue'
 import aImgList from '@/components/atoms/screen/aImgList.vue'
@@ -31,7 +31,14 @@ const onClick = async () => {
     :class="useSceneStore.editMode ? 'cursor-default' : 'cursor-pointer'"
     @click="onClick"
   >
-    <a-examine-btn />
+    <a-interaction-btn
+      :class="
+        useSceneStore.editMode &&
+        useSceneStore?.eventList[useSceneStore.eventIndex]?.type == 'interaction'
+          ? ''
+          : 'hidden'
+      "
+    />
     <a-bg />
     <a-img-list :img-pos="state.imgPos" />
     <a-chat />

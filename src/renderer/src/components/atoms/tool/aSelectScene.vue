@@ -54,11 +54,11 @@ const addScene = () => {
 <!-- 부모 컴포넌트 => components/template/tool/tEditTool.vue -->
 <template>
   <div class="flex flex-col">
-    <ul class="w-full h-[40px] overflow-x-auto flex">
+    <ul class="w-full h-[40px] overflow-x-auto flex items-center">
       <li
         v-for="(v, i) in useSceneStore.eventList"
         :key="`${useSceneStore.sceneName}-event-${i}`"
-        class="px-2 border cursor-pointer"
+        class="px-2 py-1 border cursor-pointer"
         :class="i == useSceneStore.eventIndex ? 'bg-red-400' : 'bg-gray-100 hover:bg-red-100'"
         @click="moveEvent(i)"
       >
@@ -68,13 +68,15 @@ const addScene = () => {
 
     <div class="flex flex-wrap gap-1">
       <input type="text" @keydown.enter="searchScene" />
-      <ul class="w-full h-[40px] overflow-x-auto flex text-black">
-        <li class="px-2 bg-gray-100 border cursor-pointer hover:bg-red-100" @click="addScene">+</li>
+      <ul class="w-full h-[40px] overflow-x-auto flex items-center text-black">
+        <li class="px-2 py-1 bg-gray-100 border cursor-pointer hover:bg-red-100" @click="addScene">
+          +
+        </li>
         <li
           v-for="(v, i) in state.list"
           :id="v"
           :key="`scene-name-[${v}]-${i}`"
-          class="px-2 bg-gray-100 border cursor-pointer hover:bg-red-100"
+          class="px-2 py-1 bg-gray-100 border cursor-pointer hover:bg-red-100"
           @click="selectScene"
         >
           {{ v }}

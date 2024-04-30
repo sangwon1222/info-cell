@@ -1,5 +1,6 @@
 <script setup lang="ts" scoped>
 import { useSceneStore } from '@/store/scene'
+import { map } from 'lodash-es'
 import { reactive } from 'vue'
 
 const props = withDefaults(defineProps<{ imgPos: any }>(), {
@@ -10,10 +11,17 @@ const state = reactive({
   dragImg: { index: -1, id: '' }
 })
 const onPointerDown = (e, index: number, id: string) => {
+  console.log(e)
   e.stopPropagation()
   e.preventDefault()
   state.drag = true
   state.dragImg = { index, id }
+
+  const imgTagList = document.getElementsByTagName('img')
+  map(imgTagList, (e: HTMLImageElement) => {
+    const index = e.id == id ? '2' : '1'
+    e.style.zIndex = index
+  })
 }
 const cancelDrag = (e?) => {
   e?.stopPropagation()
@@ -30,6 +38,7 @@ const onPointerMove = (e) => {
 
   const x = Math.round(e.x)
   const y = Math.round(e.y)
+
   target.style.top = `${y}px`
   target.style.left = `${x}px`
   useSceneStore.event.img[index].x = x
