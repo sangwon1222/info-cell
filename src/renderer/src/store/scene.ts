@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 
-export const useSceneStore: TypeSceneStore = reactive({
+//  TypeSceneStore
+export const useSceneStore: any = reactive({
   sceneName: '',
   gameScreen: {
     place: { id: -1, data: '', start: { x: 0, y: 0 }, x: 0, y: 0, name: '', src: '' },

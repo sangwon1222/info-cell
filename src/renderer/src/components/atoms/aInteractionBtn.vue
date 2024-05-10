@@ -1,35 +1,46 @@
 <script setup lang="ts" scoped>
 import { useGameDataStore } from '@/store/gameData'
 import { useSceneStore } from '@/store/scene'
+import { getPlaceData } from '@/util/common'
 import { reactive } from 'vue'
 
 const state = reactive({
   moveEditorList: [],
-  examineEditorList: []
+  showMoveEditorList: false,
+  examineEditorList: [],
+  showExamineEditorList: false
 })
 
-const showExamine = () => {
-  console.log(useSceneStore)
-  console.log(useGameDataStore)
+const showExamine = async () => {
+  state.showExamineEditorList = true
   if (useSceneStore.editMode) {
     console.log('편집기능')
   } else {
     console.log('진행 기능')
   }
 }
-const showMove = () => {
-  console.log('이동하기 클릭')
+const showMove = async () => {
+  state.showMoveEditorList = true
   if (useSceneStore.editMode) {
     console.log('편집기능')
   } else {
     console.log('진행 기능')
   }
 }
-const addExamine = () => {
+const addExamine = async () => {
   if (!useSceneStore.editMode) return
+  if (useGameDataStore.examine.length < 1) {
+    useGameDataStore.examine.push({ id: -1, name: 'new data' })
+  }
+  state.examineEditorList.push({ id: -1, name: '' })
 }
-const addMove = () => {
+const addMove = async () => {
   if (!useSceneStore.editMode) return
+  if (useGameDataStore.move.length < 1) {
+    ;``
+    useGameDataStore.move.push({ id: -1, name: 'new data' })
+  }
+  state.moveEditorList.push({ id: -1, name: 'new data' })
 }
 </script>
 
@@ -64,30 +75,44 @@ const addMove = () => {
         이동 추가
       </button>
 
-      <div id="examine-editor" class="flex flex-col">
-        <div v-for="(v, i) in state.moveEditorList" :key="i" class="flex gap-1">
-          <div>
-            <label for="examine">조사: </label>
-            <input id="examine" type="text" :value="v.placeId" />
+      <div
+        v-if="state.showExamineEditorList"
+        id="examine-editor"
+        class="fixed top-0 left-0 flex flex-col gap-10 items-center justify-center border border-red-400 w-[1280px] h-[720px] bg-black bg-opacity-40 pointer-events-none"
+      >
+        <div v-for="(v, i) in state.examineEditorList" :key="i" class="flex gap-10">
+          <div class="bg-white p-5 rounded pointer-events-auto">
+            <label :for="`${v.id}-examine`">조사: </label>
+            <input :id="`${v.id}-examine`" type="text" :value="v.name" />
           </div>
-          <!-- <div>
-            <label for="place">장소: </label>
-            <input id="place" type="text" />
-          </div> -->
         </div>
+
+        <button
+          class="bg-white p-5 rounded pointer-events-auto"
+          @click="() => (state.showExamineEditorList = false)"
+        >
+          취소
+        </button>
       </div>
 
-      <div id="move-editor" class="flex flex-col">
-        <div v-for="(v, i) in state.moveEditorList" :key="i" class="flex gap-1">
-          <div>
-            <label for="place">장소: </label>
-            <input id="place" type="text" />
+      <div
+        v-if="state.showMoveEditorList"
+        id="move-editor"
+        class="fixed top-0 left-0 flex flex-col gap-10 items-center justify-center border border-red-400 w-[1280px] h-[720px] bg-black bg-opacity-40 pointer-events-none"
+      >
+        <div v-for="(v, i) in state.moveEditorList" :key="i" class="flex gap-10">
+          <div class="bg-white p-5 rounded pointer-events-auto">
+            <label :for="`${i}-place-${v.name}`">장소: </label>
+            <input :id="`${i}-place-${v.name}`" type="text" :value="v.name" />
           </div>
-          <!-- <div>
-            <label for="place">장소: </label>
-            <input id="place" type="text" />
-          </div> -->
         </div>
+
+        <button
+          class="bg-white p-5 rounded pointer-events-auto"
+          @click="() => (state.showMoveEditorList = false)"
+        >
+          취소
+        </button>
       </div>
     </div>
   </div>

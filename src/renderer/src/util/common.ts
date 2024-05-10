@@ -3,7 +3,7 @@ import { useLayoutStore } from '@/store/loading'
 import { useRscDataStore } from '@/store/rscData'
 import { useSceneStore } from '@/store/scene'
 import jsonApi from '@/util/jsonApi'
-import { cloneDeep, find } from 'lodash-es'
+import { cloneDeep, find, isNaN } from 'lodash-es'
 import { useToast } from 'vue-toastification'
 const toast = useToast()
 
@@ -43,19 +43,16 @@ export const resetData = {
 }
 export const getPlaceData = async (id: number) => {
   try {
+    if (id < 0 || isNaN(id)) return null
     const searchRsc = find(useRscDataStore.rscList, (rsc) => rsc.id == id)
 
     const cache = useRscDataStore.cacheRsc[searchRsc.src]
 
-    if (cache) {
-      useSceneStore.gameScreen.place = cache
-      return
-    }
+    if (cache) return cache
 
     if (!searchRsc.src) {
       toast.error(`db/json/data/rscList.json 확인 필요 [ ${searchRsc.src} ] 없음 `)
-      useSceneStore.gameScreen.place = resetData
-      return
+      return resetData
     }
 
     const { ok, data } = await jsonApi.getRsc(searchRsc.src)
@@ -69,15 +66,15 @@ export const getPlaceData = async (id: number) => {
         x: 0,
         y: 0
       }
-      useSceneStore.gameScreen.place = useRscDataStore.cacheRsc[searchRsc.src]
+      return useRscDataStore.cacheRsc[searchRsc.src]
     } else {
       toast.error(`[ ${searchRsc.src} ] 로딩 실패 `)
-      useSceneStore.gameScreen.place = resetData
+      return resetData
     }
   } catch (e) {
     console.warn('renderer/src.util/common/getPlaceData()')
     console.error(e)
-    useSceneStore.gameScreen.place = resetData
+    return null
   }
 }
 
@@ -151,7 +148,8 @@ export const setGameData = async () => {
       break
   }
   useSceneStore.event = data
-  await getPlaceData(useSceneStore.event.placeId)
+  useSceneStore.gameScreen.place = await getPlaceData(useSceneStore.event.placeId)
+
   await getActorData(useSceneStore.event.img)
 }
 
