@@ -2,7 +2,7 @@
 import tGameScreen from '@/components/template/tGameScreen.vue'
 import tEditTool from '@/components/template/tool/tEditTool.vue'
 import { useSceneStore } from '@/store/scene'
-import { next, save } from '@/util/common'
+import { next, save } from '@/util'
 import { onMounted } from 'vue'
 onMounted(() => (useSceneStore.editMode = true))
 </script>

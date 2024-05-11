@@ -40,11 +40,6 @@ export default class JsonApi {
     })
   }
 
-  async getActorList(): Promise<TypeDBResponse> {
-    return new Promise((resolve, _reject) => {
-      this.mIpcRenderer.invoke('getActorList').then((result) => resolve(result))
-    })
-  }
   async getItemList(): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
       this.mIpcRenderer.invoke('getItemList').then((result) => resolve(result))

@@ -5,7 +5,7 @@ import tLoading from '@template/tLoading.vue'
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import { updateActorList, updateInventory, updateItemList, updateRscList } from './util/common'
+import { updateActorList, updateInventory, updateItemList, updateRscList } from './util'
 import jsonApi from './util/jsonApi'
 const router = useRouter()
 const toast = useToast()
@@ -59,3 +59,4 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+./util

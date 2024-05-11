@@ -1,9 +1,11 @@
+import App from '@/app'
 import { useGameDataStore } from '@/store/gameData'
 import { useLayoutStore } from '@/store/loading'
 import { useRscDataStore } from '@/store/rscData'
 import { useSceneStore } from '@/store/scene'
 import jsonApi from '@/util/jsonApi'
-import { cloneDeep, find, isNaN } from 'lodash-es'
+import * as PIXI from 'pixi.js'
+import { cloneDeep, find, isNaN, xor } from 'lodash-es'
 import { useToast } from 'vue-toastification'
 const toast = useToast()
 
@@ -26,10 +28,39 @@ export const updateInventory = async () => {
 
 export const uploadActor = ({ src, name }: { src: string; name: string }) => {
   useRscDataStore.cacheRsc[name] = src
+  App.getHandle.getScene.addActor(name)
 }
 
 export const uploadBg = (src: string) => {
   // state.place.src = src
+}
+
+export const getAlphaInImg = (sprite: PIXI.Sprite, x: number, y: number) => {
+  const canvas = App.getHandle.renderer.extract.canvas(sprite)
+  const localPos = sprite.toLocal(new PIXI.Point(x, y))
+  const ctx = canvas.getContext('2d')
+  const pixelData = ctx.getImageData(
+    localPos.x + sprite.width / 2,
+    localPos.y + sprite.height / 2,
+    1,
+    1
+  ).data
+  // 알파 값을 추정합니다.
+  const alpha = pixelData[3] / 255 // 알파 값은 0에서 1 사이의 값으로 정규화됩니다.
+
+  return !!alpha
+}
+
+/**
+ * @description 탭이 안보일 때 => onHiddenTab()
+ * @description 탭이 보일 때 => onViewTab()
+ * */
+export const registVisibleChange = () => {
+  document.addEventListener('visibilitychange', () => {
+    const isHidden = document.hidden
+    if (isHidden) App.getHandle.onHiddenTab()
+    if (!isHidden) App.getHandle.onViewTab()
+  })
 }
 
 export const resetData = {
@@ -41,34 +72,19 @@ export const resetData = {
   x: 0,
   y: 0
 }
-export const getPlaceData = async (id: number) => {
+export const getPlaceData = async (src: string) => {
   try {
-    if (id < 0 || isNaN(id)) return null
-    const searchRsc = find(useRscDataStore.rscList, (rsc) => rsc.id == id)
-
-    const cache = useRscDataStore.cacheRsc[searchRsc.src]
-
-    if (cache) return cache
-
-    if (!searchRsc.src) {
-      toast.error(`db/json/data/rscList.json 확인 필요 [ ${searchRsc.src} ] 없음 `)
-      return resetData
-    }
-
-    const { ok, data } = await jsonApi.getRsc(searchRsc.src)
+    const { ok, data } = await jsonApi.getRsc(src)
     if (ok) {
-      useRscDataStore.cacheRsc[searchRsc.src] = {
-        id: searchRsc.id,
-        name: searchRsc.name,
-        src: searchRsc.src,
+      return {
+        src: src,
         data,
         start: { x: 0, y: 0 },
         x: 0,
         y: 0
       }
-      return useRscDataStore.cacheRsc[searchRsc.src]
     } else {
-      toast.error(`[ ${searchRsc.src} ] 로딩 실패 `)
+      toast.error(`[ ${src} ] 로딩 실패 `)
       return resetData
     }
   } catch (e) {
@@ -89,41 +105,25 @@ export const getActorData = async (imgDataList: TypeRsc[]) => {
   const list = [...imgDataList]
   if (!list?.length) {
     useSceneStore.gameScreen.actor = []
-    return
-  }
-  try {
-    useSceneStore.gameScreen.actor = []
-    const actorList = []
-    for (let i = 0; i < list.length; i++) {
-      const imgList = cloneDeep(list[i])
-      const id = imgList.id
-      const searchRsc = find([...useRscDataStore.rscList], (rsc) => rsc.id == id)
-      const cache = useRscDataStore.cacheRsc[searchRsc.src]
-
-      if (cache) {
-        actorList.push({ ...imgList, data: cache })
-        continue
-      }
-      if (!searchRsc.src) {
-        toast.error('')
-        continue
+  } else {
+    try {
+      useSceneStore.gameScreen.actor = []
+      const actorList = []
+      for (let i = 0; i < list.length; i++) {
+        const imgList = cloneDeep(list[i])
+        const { src, start, x, y } = imgList
+        const { name } = find([...useRscDataStore.rscList], (rsc) => rsc.src == src)
+        actorList.push({ start, x, y, src, name })
       }
 
-      const { ok, data } = await jsonApi.getRsc(searchRsc.src)
-      if (ok) {
-        useRscDataStore.cacheRsc[searchRsc.src] = data
-        actorList.push({ ...imgList, data })
-      } else {
-        delete useRscDataStore.cacheRsc[searchRsc.src]
-        continue
-      }
+      useSceneStore.gameScreen.actor = actorList
+    } catch (e) {
+      console.warn('renderer/src.util/common/getActorData()')
+      console.error(e)
+      useSceneStore.gameScreen.actor = []
     }
-    useSceneStore.gameScreen.actor = actorList
-  } catch (e) {
-    console.warn('renderer/src.util/common/getActorData()')
-    console.error(e)
-    useSceneStore.gameScreen.actor = []
   }
+  App.getHandle.getScene.next()
 }
 
 export const next = async () => {
@@ -148,7 +148,7 @@ export const setGameData = async () => {
       break
   }
   useSceneStore.event = data
-  useSceneStore.gameScreen.place = await getPlaceData(useSceneStore.event.placeId)
+  useSceneStore.gameScreen.place = await getPlaceData(useSceneStore.event.place)
 
   await getActorData(useSceneStore.event.img)
 }
@@ -163,9 +163,7 @@ export const setSceneData = async ({ eventList, sceneName }: TypeSceneData) => {
   useSceneStore.eventList = eventList
   useSceneStore.sceneName = sceneName
   useSceneStore.eventIndex = 0
-
   useSceneStore.event = eventList[0]
-
   await setGameData()
 }
 

@@ -1,7 +1,7 @@
 <script setup lang="ts" scoped>
 import { useLayoutStore } from '@/store/loading'
 import { useSceneStore } from '@/store/scene'
-import { setGameData, setSceneData } from '@/util/common'
+import { setGameData, setSceneData } from '@/util'
 import jsonApi from '@/util/jsonApi'
 import { onMounted, reactive } from 'vue'
 import { useToast } from 'vue-toastification'

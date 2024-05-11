@@ -93,6 +93,7 @@ class jsonApi {
     try {
       const { sceneName, event, eventIndex } = useSceneStore
       useSceneStore.eventList[eventIndex] = event
+      console.log(useSceneStore.eventList)
       const result = await window.jsonApi.updateSceneData(
         sceneName,
         `{

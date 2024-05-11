@@ -2,7 +2,7 @@
 import aSelectScene from '@/components/atoms/tool/aSelectScene.vue'
 import aSetActor from '@/components/atoms/tool/aSetActor.vue'
 import aSetBg from '@/components/atoms/tool/aSetBg.vue'
-import { uploadActor, uploadBg } from '@/util/common'
+import { uploadActor, uploadBg } from '@/util'
 
 const emit = defineEmits(['upload-bg', 'upload-actor', 'select-scene'])
 </script>

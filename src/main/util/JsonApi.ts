@@ -108,19 +108,6 @@ class JsonApi implements TypeMiddleware {
     })
   }
 
-  async getActorList(): Promise<TypeDBResponse> {
-    return new Promise((resolve, _reject) => {
-      try {
-        fs.readFile(`${gameDataPath}/actorList.json`, function (err, buf) {
-          if (err) return resolve({ ok: false, data: [], msg: '조회 실패' })
-          const data = JSON.parse(buf).actorList
-          resolve({ ok: true, data, msg: '조회 성공' })
-        })
-      } catch (e) {
-        resolve({ ok: false, data: '', msg: `${e}` })
-      }
-    })
-  }
   async getItemList(): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
       try {

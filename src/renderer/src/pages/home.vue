@@ -4,29 +4,34 @@ import { useSceneStore } from '@/store/scene'
 import { onMounted } from 'vue'
 onMounted(() => (useSceneStore.editMode = false))
 
-const fullScreen = () => {
+const fullScreen = async () => {
   const el = document.getElementById('game-screen') as HTMLDivElement
-  closeFull()
+
+  if (document?.fullscreenElement) {
+    await closeFull()
+    return
+  }
   if (el.requestFullscreen) {
-    el.requestFullscreen()
+    await el.requestFullscreen()
   } else if (el.webkitRequestFullscreen) {
     /* Safari */
-    el.webkitRequestFullscreen()
+    await el.webkitRequestFullscreen()
   } else if (el.msRequestFullscreen) {
     /* IE11 */
-    el.msRequestFullscreen()
+    await el.msRequestFullscreen()
   }
 }
 
-const closeFull = () => {
+const closeFull = async () => {
+  if (!document?.fullscreenElement) return
   if (document?.exitFullscreen) {
-    document?.exitFullscreen()
+    await document?.exitFullscreen()
   } else if (document?.webkitExitFullscreen) {
     /* Safari */
-    document?.webkitExitFullscreen()
+    await document?.webkitExitFullscreen()
   } else if (document?.msExitFullscreen) {
     /* IE11 */
-    document?.msExitFullscreen()
+    await document?.msExitFullscreen()
   }
 }
 </script>

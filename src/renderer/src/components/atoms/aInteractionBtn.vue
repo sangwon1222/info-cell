@@ -1,7 +1,7 @@
 <script setup lang="ts" scoped>
 import { useGameDataStore } from '@/store/gameData'
 import { useSceneStore } from '@/store/scene'
-import { getPlaceData } from '@/util/common'
+import { getPlaceData } from '@/util'
 import { reactive } from 'vue'
 
 const state = reactive({

@@ -1,24 +1,31 @@
 <script setup lang="ts" scoped>
 import aInteractionBtn from '@/components/atoms/aInteractionBtn.vue'
-import aBg from '@/components/atoms/screen/aBg.vue'
 import aChat from '@/components/atoms/screen/aChat.vue'
-import aImgList from '@/components/atoms/screen/aImgList.vue'
 import { useSceneStore } from '@/store/scene'
-import { next } from '@/util/common'
-import { map } from 'lodash-es'
-import { computed, reactive } from 'vue'
+import { next } from '@/util'
+import { onMounted } from 'vue'
+import { canvasInfo } from '@/util/canvas'
+import { useLayoutStore } from '@/store/loading'
+import App from '@/app'
 
-const state = reactive({
-  imgPos: computed(() =>
-    map(useSceneStore.gameScreen.actor, (e) => {
-      if (e.x == 0 && e.y == 0) return { x: 1280 / 2, y: 720 / 2 }
-      return {
-        x: e.x,
-        y: e.y
-      }
-    })
-  )
+const { backgroundColor, width, height } = canvasInfo
+onMounted(async () => {
+  useLayoutStore.isLoading = true
+
+  const canvasElement = document.getElementById('pixi-canvas') as HTMLCanvasElement
+
+  window['app'] = new App()
+  await window['app'].init({
+    background: backgroundColor,
+    width,
+    height,
+    canvas: canvasElement
+  })
+  await window['app'].ready()
+
+  useLayoutStore.isLoading = false
 })
+
 const onClick = async () => {
   if (useSceneStore.editMode) return
   await next()
@@ -39,8 +46,9 @@ const onClick = async () => {
           : 'hidden'
       "
     />
-    <a-bg />
-    <a-img-list :img-pos="state.imgPos" />
+    <canvas id="pixi-canvas" class="absolute top-0 left-0 !w-[1280px] !h-[720px] z-0" />
+    <!-- <a-bg />
+    <a-img-list :img-pos="state.imgPos" /> -->
     <a-chat />
   </div>
 </template>
