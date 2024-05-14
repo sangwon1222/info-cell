@@ -1,13 +1,8 @@
-import { canvasInfo } from '@/util/canvas'
-import * as PIXI from 'pixi.js'
-import Scene from '../scene'
-import gsap from 'gsap'
-import { useSceneStore } from '@/store/scene'
 import { rscManager } from '@/app/resource/resourceManager'
-import App from '@/app'
-import { getAlphaInImg } from '@/util'
-import InfoCell from '.'
+import { useSceneStore } from '@/store/scene'
 import { find } from 'lodash-es'
+import * as PIXI from 'pixi.js'
+import InfoCell from '.'
 
 export default class Actor extends PIXI.Container {
   private mSrc: string
@@ -41,7 +36,7 @@ export default class Actor extends PIXI.Container {
       //   const able = getAlphaInImg(target, e.x, e.y)
       this.mMoveFlag = true
       //   if (able) {
-      ;(this.parent.parent as InfoCell).sortActor(this.mId)
+      ;(this.parent.parent as InfoCell).sortActor(this.mSrc)
       //   }
     })
 
@@ -57,15 +52,15 @@ export default class Actor extends PIXI.Container {
   endMove(e) {
     if (this.mMoveFlag) {
       this.mMoveFlag = false
-      const target = find(useSceneStore.event.img, (e) => e.src == this.mSrc)
+      const target = find(useSceneStore.data.img, (e) => e.src == this.mSrc)
       if (target) {
         target.x = e.x
         target.y = e.y
       } else {
-        useSceneStore.event.img.push({ src: this.mSrc, x: e.x, y: e.y, start: { x: 0, y: 0 } })
+        useSceneStore.data.img.push({ src: this.mSrc, x: e.x, y: e.y, start: { x: 0, y: 0 } })
       }
       console.log(target)
-      console.log(useSceneStore.event)
+      console.log(useSceneStore.data)
     }
   }
 }

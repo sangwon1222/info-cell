@@ -46,11 +46,6 @@ export default class JsonApi {
     })
   }
 
-  async getRscList(): Promise<TypeDBResponse> {
-    return new Promise((resolve, _reject) => {
-      this.mIpcRenderer.invoke('getRscList').then((result) => resolve(result))
-    })
-  }
   async getInventoryData(): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
       this.mIpcRenderer.invoke('getInventoryData').then((result) => resolve(result))
@@ -62,6 +57,12 @@ export default class JsonApi {
       this.mIpcRenderer
         .invoke('updateSceneData', [sceneName, event])
         .then((result) => resolve(result))
+    })
+  }
+
+  async downloadRsc(): Promise<TypeDBResponse> {
+    return new Promise((resolve, _reject) => {
+      this.mIpcRenderer.invoke('downloadRsc').then((result) => resolve(result))
     })
   }
 }

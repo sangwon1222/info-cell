@@ -1,12 +1,12 @@
 <script setup lang="ts" scoped>
-import aInteractionBtn from '@/components/atoms/aInteractionBtn.vue'
+import App from '@/app'
 import aChat from '@/components/atoms/screen/aChat.vue'
+import tBtnWrap from '@/components/template/tBtnWrap.vue'
+import { useLayoutStore } from '@/store/loading'
 import { useSceneStore } from '@/store/scene'
 import { next } from '@/util'
-import { onMounted } from 'vue'
 import { canvasInfo } from '@/util/canvas'
-import { useLayoutStore } from '@/store/loading'
-import App from '@/app'
+import { onMounted } from 'vue'
 
 const { backgroundColor, width, height } = canvasInfo
 onMounted(async () => {
@@ -38,17 +38,8 @@ const onClick = async () => {
     :class="useSceneStore.editMode ? 'cursor-default' : 'cursor-pointer'"
     @click="onClick"
   >
-    <a-interaction-btn
-      :class="
-        useSceneStore.editMode &&
-        useSceneStore?.eventList[useSceneStore.eventIndex]?.type == 'interaction'
-          ? ''
-          : 'hidden'
-      "
-    />
+    <t-btn-wrap v-if="useSceneStore?.data?.type == 'interaction'" />
     <canvas id="pixi-canvas" class="absolute top-0 left-0 !w-[1280px] !h-[720px] z-0" />
-    <!-- <a-bg />
-    <a-img-list :img-pos="state.imgPos" /> -->
     <a-chat />
   </div>
 </template>

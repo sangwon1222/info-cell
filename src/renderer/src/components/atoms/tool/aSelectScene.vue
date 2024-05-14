@@ -26,23 +26,27 @@ const searchScene = async (e) => {
 }
 
 const selectScene = async (e) => {
-  useLayoutStore.isLoading = true
   const target = e.currentTarget as HTMLLIElement
+  if (!target.id) {
+    setSceneData({ eventList: [], sceneName: '' })
+    return
+  }
+
+  useLayoutStore.isLoading = true
   const sceneName = target.id
 
-  if (sceneName) {
-    const { ok, data } = await jsonApi.getScene(sceneName)
-    if (ok) setSceneData({ eventList: data.script, sceneName })
-    else toast.error('데이터 조회 실패')
+  const { ok, data } = await jsonApi.getScene(sceneName)
+  if (ok) {
+    setSceneData({ eventList: data.script, sceneName })
   } else {
-    setSceneData({ eventList: [], sceneName })
+    setSceneData({ eventList: [], sceneName: '' })
   }
+
   useLayoutStore.isLoading = false
 }
 
 const moveEvent = async (i: number) => {
   useSceneStore.eventIndex = i
-
   await setGameData()
 }
 
@@ -56,13 +60,18 @@ const addScene = () => {
   <div class="flex flex-col">
     <ul class="w-full h-[40px] overflow-x-auto flex items-center">
       <li
-        v-for="(v, i) in useSceneStore.eventList"
+        v-for="(v, i) in useSceneStore.list"
         :key="`${useSceneStore.sceneName}-event-${i}`"
-        class="px-2 py-1 border cursor-pointer"
-        :class="i == useSceneStore.eventIndex ? 'bg-red-400' : 'bg-gray-100 hover:bg-red-100'"
+        class="border cursor-pointer flex flex-col items-center"
+        :class="
+          i == useSceneStore.eventIndex
+            ? 'bg-red-400 text-white'
+            : `bg-gray-100 hover:bg-red-100 ${v.type == 'chat' ? 'text-black' : 'text-red-600'}`
+        "
         @click="moveEvent(i)"
       >
-        {{ (v as TypeInterActiveEvents | TypeChatEvents).type }}-{{ i }}
+        <span>[{{ v.type.slice(0, 4) }}]</span>
+        <span>[{{ i }}]</span>
       </li>
     </ul>
 

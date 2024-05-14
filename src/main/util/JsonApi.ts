@@ -70,8 +70,6 @@ class JsonApi implements TypeMiddleware {
 
   async getRsc(file: string): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
-      // const name = `${rscPath}/${file.replaceAll(`"`, '')}`
-      console.log(file)
       const name = `${rscPath}/${file}`
       try {
         const base64 = fs.readFileSync(name, 'base64')
@@ -111,22 +109,9 @@ class JsonApi implements TypeMiddleware {
   async getItemList(): Promise<TypeDBResponse> {
     return new Promise((resolve, _reject) => {
       try {
-        fs.readFile(`${gameDataPath}/itemList.json`, function (err, buf) {
+        fs.readFile(rscPath, function (err, buf) {
           if (err) return resolve({ ok: false, data: [], msg: '조회 실패' })
           const data = JSON.parse(buf).itemList
-          resolve({ ok: true, data, msg: '조회 성공' })
-        })
-      } catch (e) {
-        resolve({ ok: false, data: '', msg: `${e}` })
-      }
-    })
-  }
-  async getRscList(): Promise<TypeDBResponse> {
-    return new Promise((resolve, _reject) => {
-      try {
-        fs.readFile(`${gameDataPath}/rscList.json`, function (err, buf) {
-          if (err) return resolve({ ok: false, data: [], msg: '조회 실패' })
-          const data = JSON.parse(buf).rscList
           resolve({ ok: true, data, msg: '조회 성공' })
         })
       } catch (e) {
@@ -156,6 +141,31 @@ class JsonApi implements TypeMiddleware {
           if (err) return resolve({ ok: false, data: eventData, msg: '업데이트 실패' })
           resolve({ ok: true, data: eventData, msg: '업데이트 성공' })
         })
+      } catch (e) {
+        resolve({ ok: false, data: '', msg: `${e}` })
+      }
+    })
+  }
+
+  async downloadRsc(): Promise<any> {
+    return new Promise((resolve, _reject) => {
+      try {
+        const files = fs.readdirSync(rscPath)
+        const list: { src: string; data: string }[] = []
+        for (let i = 0; i < files.length; i++) {
+          const imgPath = `${rscPath}/${files[i]}`
+          fs.readFile(imgPath, (err, data) => {
+            // error handle
+            if (err) {
+              throw err
+            }
+            const extensionName = 'png'
+            const base64Image = Buffer.from(data, 'binary').toString('base64')
+            const base64ImageStr = `data:image/${extensionName};base64,${base64Image}`
+            list.push({ src: files[i], data: base64ImageStr })
+            if (list.length == files.length) resolve({ ok: true, data: list, msg: '' })
+          })
+        }
       } catch (e) {
         resolve({ ok: false, data: '', msg: `${e}` })
       }

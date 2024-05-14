@@ -37,7 +37,8 @@
     "pixi.js": "8.1.1",
     "ts-node": "^10.9.1",
     "vue-router": "^4.2.0",
-    "vue-toastification": "2.0.0-rc.2"
+    "vue-toastification": "2.0.0-rc.2",
+    "webpack": "^5.91.0"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",

@@ -1,9 +1,8 @@
+import { rscManager } from '@/app/resource/resourceManager'
+import { useSceneStore } from '@/store/scene'
 import { canvasInfo } from '@/util/canvas'
 import * as PIXI from 'pixi.js'
 import Scene from '../scene'
-import gsap from 'gsap'
-import { useSceneStore } from '@/store/scene'
-import { rscManager } from '@/app/resource/resourceManager'
 import Actor from './actor'
 
 const { width, height } = canvasInfo
@@ -31,22 +30,18 @@ export default class InfoCell extends Scene {
     this.addChild(this.mBgSprite, this.mActorContainer)
   }
 
-  async startGame() {
-    console.log('startGame')
-  }
-
-  async next() {
-    console.log(useSceneStore.gameScreen)
-    if (this.mBgInfo.src !== useSceneStore.gameScreen.place.src) {
-      this.mBgInfo.src = useSceneStore.gameScreen.place.src
-      const texture = await rscManager.getHandle.getRsc(useSceneStore.gameScreen.place.src)
+  async startEvent() {
+    console.log('app/scene/info/index.ts => startEvent()')
+    if (this.mBgInfo.src !== useSceneStore.data.place) {
+      this.mBgInfo.src = useSceneStore.data.place
+      const texture = await rscManager.getHandle.getRsc(useSceneStore.data.place)
       this.mBgSprite.position.set(this.mBgInfo.x, this.mBgInfo.y)
       this.mBgSprite.texture = texture
     }
 
     this.mActorList = []
     this.mActorContainer.removeChildren()
-    const actorData = useSceneStore.gameScreen.actor
+    const actorData = useSceneStore.data.img
     for (let i = 0; i < actorData.length; i++) {
       const { src, start, x, y } = actorData[i]
 
@@ -75,8 +70,8 @@ export default class InfoCell extends Scene {
       actor.zIndex = actor.src == src ? 2 : 1
     }
   }
-  async addActor(name: string) {
-    const actor = new Actor(name)
+  async addActor(src: string) {
+    const actor = new Actor(src)
     await actor.init()
     actor.position.set(width / 2, height / 2)
     actor.setInteraction = true

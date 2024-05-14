@@ -1,10 +1,9 @@
 import jsonApi from '@/util/jsonApi'
-import Application from '@/app'
 import * as PIXI from 'pixi.js'
 
 export class rscManager {
   private static handle: rscManager
-  private mRscObject: TypeObjectAny
+  private mRscObject: any
 
   static get getHandle(): rscManager {
     const handle = rscManager.handle ? rscManager.handle : new rscManager()

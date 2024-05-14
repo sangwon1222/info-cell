@@ -1,38 +1,29 @@
 import App from '@/app'
-import { useGameDataStore } from '@/store/gameData'
 import { useLayoutStore } from '@/store/loading'
 import { useRscDataStore } from '@/store/rscData'
 import { useSceneStore } from '@/store/scene'
 import jsonApi from '@/util/jsonApi'
+import { cloneDeep } from 'lodash-es'
 import * as PIXI from 'pixi.js'
-import { cloneDeep, find, isNaN, xor } from 'lodash-es'
 import { useToast } from 'vue-toastification'
 const toast = useToast()
 
-export const updateActorList = async () => {
-  const actorData = await jsonApi.getActorList()
-  if (actorData.ok) useRscDataStore.actorList = actorData.data
+export const downloadRsc = async () => {
+  const { ok, data } = await jsonApi.downloadRsc()
+  return { ok, data }
 }
-export const updateItemList = async () => {
+
+export const getItemList = async () => {
   const itemData = await jsonApi.getItemList()
   if (itemData.ok) useRscDataStore.itemList = itemData.data
 }
-export const updateRscList = async () => {
-  const actorData = await jsonApi.getRscList()
-  if (actorData.ok) useRscDataStore.rscList = actorData.data
-}
-export const updateInventory = async () => {
+export const getInventory = async () => {
   const inventoryData = await jsonApi.getInventoryData()
   if (inventoryData.ok) useRscDataStore.inventory = inventoryData.data
 }
 
 export const uploadActor = ({ src, name }: { src: string; name: string }) => {
-  useRscDataStore.cacheRsc[name] = src
   App.getHandle.getScene.addActor(name)
-}
-
-export const uploadBg = (src: string) => {
-  // state.place.src = src
 }
 
 export const getAlphaInImg = (sprite: PIXI.Sprite, x: number, y: number) => {
@@ -72,7 +63,7 @@ export const resetData = {
   x: 0,
   y: 0
 }
-export const getPlaceData = async (src: string) => {
+export const getRsc = async (src: string) => {
   try {
     const { ok, data } = await jsonApi.getRsc(src)
     if (ok) {
@@ -88,83 +79,69 @@ export const getPlaceData = async (src: string) => {
       return resetData
     }
   } catch (e) {
-    console.warn('renderer/src.util/common/getPlaceData()')
+    console.warn('renderer/src.util/common/getImgData()')
     console.error(e)
     return null
   }
 }
 
-export const resetInteraction = async (imgDataList: TypeRsc[]) => {
-  useGameDataStore.examine = []
-  useGameDataStore.move = []
-  useGameDataStore.talk = []
-  useGameDataStore.use = []
-}
-
-export const getActorData = async (imgDataList: TypeRsc[]) => {
-  const list = [...imgDataList]
-  if (!list?.length) {
-    useSceneStore.gameScreen.actor = []
-  } else {
-    try {
-      useSceneStore.gameScreen.actor = []
-      const actorList = []
-      for (let i = 0; i < list.length; i++) {
-        const imgList = cloneDeep(list[i])
-        const { src, start, x, y } = imgList
-        const { name } = find([...useRscDataStore.rscList], (rsc) => rsc.src == src)
-        actorList.push({ start, x, y, src, name })
-      }
-
-      useSceneStore.gameScreen.actor = actorList
-    } catch (e) {
-      console.warn('renderer/src.util/common/getActorData()')
-      console.error(e)
-      useSceneStore.gameScreen.actor = []
-    }
+export const prev = async () => {
+  console.log('util/index.ts => prev()')
+  const prevIndex = useSceneStore.eventIndex - 1
+  const prevData = useSceneStore.list[prevIndex]
+  if (prevData) {
+    useSceneStore.data = cloneDeep(prevData)
+    useSceneStore.eventIndex = prevIndex
+    await setGameData()
   }
-  App.getHandle.getScene.next()
 }
-
 export const next = async () => {
+  console.log('util/index.ts => next()')
   const nextIndex = useSceneStore.eventIndex + 1
-  const nextData = useSceneStore.eventList[nextIndex]
-  if (!nextData) return
-
-  useSceneStore.eventIndex += 1
-  await setGameData()
+  const nextData = useSceneStore.list[nextIndex]
+  if (nextData) {
+    useSceneStore.data = cloneDeep(nextData)
+    useSceneStore.eventIndex = nextIndex
+    await setGameData()
+  }
 }
 
 export const setGameData = async () => {
+  console.log('util/index.ts => setGameData()')
   const idx = useSceneStore.eventIndex
-  const data = cloneDeep(useSceneStore.eventList[idx])
-  const { type } = useSceneStore.eventList[idx]
-  switch (type) {
+  const list = cloneDeep(useSceneStore.list)
+  useSceneStore.data = list[idx]
+  switch (useSceneStore.data.type) {
     case 'interaction':
-      useGameDataStore.examine = data.examine
+      console.error('interaction')
       break
     case 'chat':
-      useGameDataStore.examine = []
+      console.error('chat')
       break
   }
-  useSceneStore.event = data
-  useSceneStore.gameScreen.place = await getPlaceData(useSceneStore.event.place)
 
-  await getActorData(useSceneStore.event.img)
+  App.getHandle.getScene.startEvent()
 }
 
 interface TypeSceneData {
-  eventList: TypeInterActiveEvents | TypeChatEvents[]
+  eventList: any[]
   sceneName: string
 }
 export const setSceneData = async ({ eventList, sceneName }: TypeSceneData) => {
-  useGameDataStore.chat = ''
-  useGameDataStore.actor = ''
-  useSceneStore.eventList = eventList
-  useSceneStore.sceneName = sceneName
-  useSceneStore.eventIndex = 0
-  useSceneStore.event = eventList[0]
-  await setGameData()
+  console.log('util/index.ts => setSceneData()')
+  if (eventList.length > 0 && sceneName) {
+    useSceneStore.list = eventList
+    useSceneStore.sceneName = sceneName
+    useSceneStore.eventIndex = 0
+    useSceneStore.data = eventList[0]
+    await setGameData()
+  } else {
+    useSceneStore.list = []
+    useSceneStore.data = {}
+    useSceneStore.sceneName = ''
+    useSceneStore.eventIndex = 0
+    toast.error('조회 실패')
+  }
 }
 
 export const save = async () => {

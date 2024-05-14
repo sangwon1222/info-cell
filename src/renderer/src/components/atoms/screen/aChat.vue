@@ -5,19 +5,22 @@ defineEmits(['next'])
 
 const changeActor = (e) => {
   const target = e.currentTarget as HTMLInputElement
-  useSceneStore.event.actor = target.value
+  useSceneStore.data.actor = target.value
 }
 </script>
 
 <!-- 부모 컴포넌트 => components/template/tGameScreen.vue -->
 <template>
   <div class="absolute bottom-0 w-full h-[200px] text-white text-xl">
-    <div v-if="!useSceneStore.editMode && useSceneStore.event.chat" class="flex flex-col">
+    <div
+      v-if="!useSceneStore.editMode && useSceneStore.data?.chat.length > 0"
+      class="flex flex-col"
+    >
       <p class="z-10 h-10 w-fit">
-        {{ useSceneStore.event?.actor }}
+        {{ useSceneStore.data?.actor }}
       </p>
       <p class="z-10 flex-1 mx-4 overflow-hidden bg-transparent whitespace-nowrap animate-typing">
-        {{ useSceneStore.event?.chat }}
+        {{ useSceneStore.data?.chat }}
         <span class="ml-2 animate-pulse">_</span>
       </p>
     </div>
@@ -26,13 +29,13 @@ const changeActor = (e) => {
       <input
         class="z-10 h-10 text-white bg-transparent border border-white w-fit"
         type="text"
-        :value="useSceneStore.event?.actor"
+        :value="useSceneStore.data?.actor"
         @input="changeActor"
       />
       <textarea
         class="z-10 h-[120px] mx-4 bg-transparent border-white border typing text-white"
         type="text"
-        :value="useSceneStore.event?.chat"
+        :value="useSceneStore.data?.chat"
       >
       </textarea>
     </div>

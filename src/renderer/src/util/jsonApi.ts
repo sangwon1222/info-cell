@@ -52,15 +52,6 @@ class jsonApi {
     }
   }
 
-  async getActorList() {
-    try {
-      const result = await window.jsonApi.getActorList()
-      return result
-    } catch (e) {
-      console.error(e)
-      return e
-    }
-  }
   async getItemList() {
     try {
       const result = await window.jsonApi.getItemList()
@@ -70,15 +61,7 @@ class jsonApi {
       return e
     }
   }
-  async getRscList() {
-    try {
-      const result = await window.jsonApi.getRscList()
-      return result
-    } catch (e) {
-      console.error(e)
-      return e
-    }
-  }
+
   async getInventoryData() {
     try {
       const result = await window.jsonApi.getInventoryData()
@@ -92,15 +75,25 @@ class jsonApi {
   async updateSceneData() {
     try {
       const { sceneName, event, eventIndex } = useSceneStore
-      useSceneStore.eventList[eventIndex] = event
-      console.log(useSceneStore.eventList)
+      useSceneStore.data[eventIndex] = event
+      console.log(useSceneStore.data)
       const result = await window.jsonApi.updateSceneData(
         sceneName,
         `{
-          "script":${JSON.stringify(useSceneStore.eventList)}
+          "script":${JSON.stringify(useSceneStore.data)}
         }
           `
       )
+      return result
+    } catch (e) {
+      console.error(e)
+      return e
+    }
+  }
+
+  async downloadRsc() {
+    try {
+      const result = await window.jsonApi.downloadRsc()
       return result
     } catch (e) {
       console.error(e)
